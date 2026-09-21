@@ -11,7 +11,7 @@ from sqlalchemy.pool import StaticPool
 
 from app.database import Base, get_db
 from app.main import app
-from app.models import Rol, Usuario, Producto, Gato
+from app.models.models import Rol, Usuario, Producto, Gato
 from app.auth import hash_password, create_access_token
 
 # Base de datos SQLite aislada en memoria para pruebas rápidas y reproducibles

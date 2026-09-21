@@ -7,8 +7,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Path, Query, Back
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Usuario, Rol
-from app.schemas import UsuarioOut, UsuarioCreate, UsuarioUpdate, StatusUpdate, RegisterRequest
+from app.models.models import Usuario, Rol
+from app.views.schemas import UsuarioOut, UsuarioCreate, UsuarioUpdate, StatusUpdate, RegisterRequest
 from app.auth import hash_password, require_role, get_current_user
 from app.tasks import log_auditoria_task, send_welcome_email_task
 

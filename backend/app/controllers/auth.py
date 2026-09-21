@@ -10,8 +10,8 @@ from sqlalchemy.orm import Session
 from jose import jwt, JWTError
 
 from app.database import get_db
-from app.models import Usuario
-from app.schemas import LoginRequest, TokenResponse, RecoverPasswordRequest, ResetPasswordRequest
+from app.models.models import Usuario
+from app.views.schemas import LoginRequest, TokenResponse, RecoverPasswordRequest, ResetPasswordRequest
 from app.auth import verify_password, create_access_token, hash_password, SECRET_KEY, ALGORITHM, get_current_user
 
 router = APIRouter(prefix="/api/auth", tags=["Autenticación"])

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Sun, Moon } from 'lucide-react';
 
 const Header = ({ theme, toggleTheme }) => {
   const navigate = useNavigate();
@@ -86,8 +87,9 @@ const Header = ({ theme, toggleTheme }) => {
             className="site-toggle"
             aria-label="Alternar modo de color"
             title={theme === 'light' ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro'}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
           >
-            {theme === 'light' ? '🌙 Oscuro' : '☀️ Claro'}
+            {theme === 'light' ? <><Moon size={18} /> Oscuro</> : <><Sun size={18} /> Claro</>}
           </button>
         </div>
       </div>

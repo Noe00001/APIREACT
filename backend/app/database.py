@@ -78,7 +78,7 @@ def init_db():
     Inicializa tablas y datos semilla iniciales si la base de datos está vacía.
     Garantiza que el proyecto funcione de inmediato al iniciarse.
     """
-    from app.models import Rol, Permiso, Usuario, Producto, Servicio, Gato
+    from app.models.models import Rol, Permiso, Usuario, Producto, Servicio, Gato
     from app.auth import hash_password
 
     Base.metadata.create_all(bind=engine)
@@ -122,6 +122,25 @@ def init_db():
             db.add(admin)
             db.commit()
             db.refresh(admin)
+
+        # 3.1 Sembrar usuario Empleado principal si no existe
+        empleado_email = "empleado@cafecato.com"
+        empleado = db.query(Usuario).filter(Usuario.email == empleado_email).first()
+        if not empleado:
+            empleado = Usuario(
+                nombre="Juan Carlos",
+                apellido="Pérez",
+                tipo_documento="CC",
+                numero_documento="1234567890",
+                direccion="Avenida Siempreviva",
+                telefono="3009876543",
+                email=empleado_email,
+                password_hash=hash_password("Empleado123*"),
+                estado="Activo",
+                rol_id=roles_map["Empleado"].id,
+            )
+            db.add(empleado)
+            db.commit()
 
         # 4. Sembrar productos si no hay ninguno
         if db.query(Producto).count() == 0:

@@ -12,8 +12,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Producto, Gato
-from app.schemas import RecomendacionIARequest, RecomendacionIAResponse
+from app.models.models import Producto, Gato
+from app.views.schemas import RecomendacionIARequest, RecomendacionIAResponse
 
 logger = logging.getLogger("cafe_cato.ia")
 router = APIRouter(prefix="/api/ia", tags=["Inteligencia Artificial"])

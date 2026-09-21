@@ -18,14 +18,14 @@ class LoginRequest(BaseModel):
 
 
 class RegisterRequest(BaseModel):
-    nombre: str = Field(..., min_length=2, max_length=50, description="Nombre del usuario", examples=["Salomé"])
-    apellido: str = Field(..., min_length=2, max_length=50, description="Apellido del usuario", examples=["López"])
+    nombre: str = Field(..., min_length=10, max_length=20, description="Nombre del usuario", examples=["Salomé"])
+    apellido: str = Field(..., min_length=10, max_length=20, description="Apellido del usuario", examples=["López"])
     tipoDocumento: str = Field(..., min_length=2, max_length=20, description="Tipo de identificación", examples=["CC"])
     numeroDocumento: str = Field(..., min_length=6, max_length=12, description="Número de documento", examples=["1020304050"])
     direccion: str = Field(..., min_length=5, max_length=120, description="Dirección de residencia", examples=["Calle 45 # 12-34"])
     telefono: str = Field(..., min_length=7, max_length=15, description="Número telefónico", examples=["3001234567"])
     email: EmailStr = Field(..., description="Correo institucional o personal", examples=["salome@correo.com"])
-    password: str = Field(..., min_length=8, description="Contraseña segura (mínimo 8 caracteres, 1 mayúscula, 1 número)")
+    password: str = Field(..., min_length=8, max_length=50, description="Contraseña segura (mínimo 8, máximo 50 caracteres)")
 
     @field_validator("nombre", "apellido")
     @classmethod
@@ -75,7 +75,7 @@ class RecoverPasswordRequest(BaseModel):
 
 class ResetPasswordRequest(BaseModel):
     token: str = Field(..., description="Token de recuperación temporal")
-    password: str = Field(..., min_length=8, description="Nueva contraseña segura")
+    password: str = Field(..., min_length=8, max_length=50, description="Nueva contraseña segura")
 
     @field_validator("password")
     @classmethod
@@ -106,14 +106,14 @@ class UsuarioOut(BaseModel):
 
 
 class UsuarioCreate(BaseModel):
-    nombre: str = Field(..., min_length=2, max_length=50)
-    apellido: str = Field(..., min_length=2, max_length=50)
+    nombre: str = Field(..., min_length=10, max_length=20)
+    apellido: str = Field(..., min_length=10, max_length=20)
     tipoDocumento: str = Field(..., min_length=2, max_length=20)
     numeroDocumento: str = Field(..., min_length=6, max_length=12)
     direccion: str = Field(..., min_length=5, max_length=120)
     telefono: str = Field(..., min_length=7, max_length=15)
     email: EmailStr
-    password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8, max_length=50)
     rol: str = Field("Empleado", description="Rol del usuario (Administrador, Empleado, Cliente)")
 
     @field_validator("rol")
@@ -126,8 +126,8 @@ class UsuarioCreate(BaseModel):
 
 
 class UsuarioUpdate(BaseModel):
-    nombre: str = Field(..., min_length=2, max_length=50)
-    apellido: str = Field(..., min_length=2, max_length=50)
+    nombre: str = Field(..., min_length=10, max_length=20)
+    apellido: str = Field(..., min_length=10, max_length=20)
     direccion: str = Field(..., min_length=5, max_length=120)
     telefono: str = Field(..., min_length=7, max_length=15)
     email: EmailStr

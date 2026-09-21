@@ -9,8 +9,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Path, Query, Back
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Gato, Usuario
-from app.schemas import GatoCreate, GatoUpdate, GatoOut, GatoStatusUpdate
+from app.models.models import Gato, Usuario
+from app.views.schemas import GatoCreate, GatoUpdate, GatoOut, GatoStatusUpdate
 from app.auth import require_role, get_current_user
 from app.tasks import log_auditoria_task
 

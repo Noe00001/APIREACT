@@ -2,6 +2,7 @@ import { Carrusel } from '../components/Carrusel';
 import CatalogSection from '../components/CatalogSection';
 import CatAdoptionSection from '../components/CatAdoptionSection';
 import AiCoffeeRecommender from '../components/AiCoffeeRecommender';
+import { Coffee, Sparkles, PawPrint } from 'lucide-react';
 
 const HomePage = () => {
   return (
@@ -12,10 +13,10 @@ const HomePage = () => {
           <h1>Sabores cálidos, aromas únicos y ronroneos</h1>
           <p>Descubre nuestras bebidas artesanales, repostería casera y el rincón perfecto para disfrutar de un café en compañía de gatitos rescatados.</p>
           <div className="hero-cta-group" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '20px' }}>
-            <a href="#productos" className="site-cta" style={{ textDecoration: 'none' }}>☕ Productos (10)</a>
-            <a href="#servicios" className="site-cta" style={{ textDecoration: 'none' }}>✨ Servicios (10)</a>
-            <a href="#adopciones" className="site-cta" style={{ textDecoration: 'none' }}>🐾 Gatos (10)</a>
-            <a href="#ia-recommender" className="site-toggle" style={{ textDecoration: 'none' }}>✨ Recomendación IA</a>
+            <a href="#productos" className="site-cta" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Coffee size={18} /> Productos (10)</a>
+            <a href="#servicios" className="site-cta" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Sparkles size={18} /> Servicios (10)</a>
+            <a href="#adopciones" className="site-cta" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><PawPrint size={18} /> Gatos (10)</a>
+            <a href="#ia-recommender" className="site-toggle" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Sparkles size={18} /> Recomendación IA</a>
           </div>
         </div>
       </section>

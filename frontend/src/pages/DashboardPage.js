@@ -209,18 +209,76 @@ const DashboardPage = () => {
   );
 
   return (
-    <section className="page-section">
-      <div className="page-card dashboard-page">
-        <div className="dashboard-header-block">
-          <div>
-            <span className="eyebrow">Panel de control • {user.rol}</span>
-            <h2>Bienvenido, {user.nombre} {user.apellido}</h2>
-            <p>
-              {user.rol === 'Administrador'
-                ? 'Control integral de usuarios, catálogo de cafetería, servicios y adopciones felinas.'
-                : 'Gestión y consulta de catálogo y operaciones de Café Salome.'}
-            </p>
+    <section className="page-section" style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: 0 }}>
+      <div className="page-card dashboard-page" style={{ flex: 1, display: 'flex', flexDirection: 'row', padding: 0, overflow: 'hidden', margin: 0, maxWidth: '100%', borderRadius: 0 }}>
+        {/* Sidebar */}
+        <aside style={{ width: '250px', background: 'var(--card-bg)', borderRight: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', padding: '1rem', overflowY: 'auto' }}>
+          <div style={{ marginBottom: '2rem' }}>
+            <span className="eyebrow" style={{ display: 'block', marginBottom: '0.5rem' }}>Panel de control</span>
+            <h2 style={{ fontSize: '1.2rem', margin: 0 }}>{user.nombre} {user.apellido}</h2>
+            <span className={`badge-role role-${user.rol?.toLowerCase()}`} style={{ marginTop: '0.5rem', display: 'inline-block' }}>{user.rol}</span>
           </div>
+
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {user.rol === 'Administrador' && (
+              <button
+                type="button"
+                className={`sidebar-link ${activeTab === 'usuarios' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
+                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'usuarios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'usuarios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+              >
+                👥 Usuarios ({users.length})
+              </button>
+            )}
+            <button
+              type="button"
+              className={`sidebar-link ${activeTab === 'productos' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('productos'); setSearchTerm(''); }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'productos' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'productos' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+            >
+              ☕ Productos ({products.length})
+            </button>
+            <button
+              type="button"
+              className={`sidebar-link ${activeTab === 'servicios' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('servicios'); setSearchTerm(''); }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'servicios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'servicios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+            >
+              🍰 Servicios ({services.length})
+            </button>
+            <button
+              type="button"
+              className={`sidebar-link ${activeTab === 'gatos' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('gatos'); setSearchTerm(''); }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'gatos' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'gatos' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+            >
+              🐾 Gatos ({gatos.length})
+            </button>
+            {user.rol === 'Administrador' && (
+              <button
+                type="button"
+                className={`sidebar-link ${activeTab === 'catalogo' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('catalogo'); setSearchTerm(''); }}
+                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'catalogo' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'catalogo' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+              >
+                ⚙️ Gestión Rápida
+              </button>
+            )}
+          </nav>
+        </aside>
+
+        {/* Main Content */}
+        <main style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
+          <div className="dashboard-header-block" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <span className="eyebrow">Panel de control • {user.rol}</span>
+              <h2>Catálogo y Gestión</h2>
+              <p>
+                {user.rol === 'Administrador'
+                  ? 'Control integral de usuarios, catálogo de cafetería, servicios y adopciones felinas.'
+                  : 'Gestión y consulta de catálogo y operaciones de Café Salome.'}
+              </p>
+            </div>
 
           <div className="dashboard-stats-row">
             <div className="dashboard-stat-card">
@@ -244,57 +302,15 @@ const DashboardPage = () => {
         {successMessage && <div className="dashboard-toast success">{successMessage}</div>}
         {message && <div className="dashboard-toast error">{message}</div>}
 
-        {/* Search & Tabs */}
-        <div className="dashboard-nav-bar">
-          <div className="dashboard-tabs">
-            {user.rol === 'Administrador' && (
-              <button
-                type="button"
-                className={activeTab === 'usuarios' ? 'active-tab' : ''}
-                onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
-              >
-                👥 Usuarios ({users.length})
-              </button>
-            )}
-            <button
-              type="button"
-              className={activeTab === 'productos' ? 'active-tab' : ''}
-              onClick={() => { setActiveTab('productos'); setSearchTerm(''); }}
-            >
-              ☕ Productos ({products.length})
-            </button>
-            <button
-              type="button"
-              className={activeTab === 'servicios' ? 'active-tab' : ''}
-              onClick={() => { setActiveTab('servicios'); setSearchTerm(''); }}
-            >
-              🍰 Servicios ({services.length})
-            </button>
-            <button
-              type="button"
-              className={activeTab === 'gatos' ? 'active-tab' : ''}
-              onClick={() => { setActiveTab('gatos'); setSearchTerm(''); }}
-            >
-              🐾 Gatos ({gatos.length})
-            </button>
-            {user.rol === 'Administrador' && (
-              <button
-                type="button"
-                className={activeTab === 'catalogo' ? 'active-tab' : ''}
-                onClick={() => { setActiveTab('catalogo'); setSearchTerm(''); }}
-              >
-                ⚙️ Gestión Rápida
-              </button>
-            )}
-          </div>
-
-          <div className="dashboard-search-wrap">
+          {/* Search Bar */}
+          <div className="dashboard-search-wrap" style={{ display: 'flex', marginBottom: '2rem' }}>
             <input
               type="text"
               placeholder={`Buscar en ${activeTab}...`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="dashboard-search-input"
+              style={{ flex: 1 }}
             />
             {searchTerm && (
               <button
@@ -306,7 +322,6 @@ const DashboardPage = () => {
               </button>
             )}
           </div>
-        </div>
 
         {/* Quick add toggle for Admin */}
         {user.rol === 'Administrador' && (
@@ -750,6 +765,7 @@ const DashboardPage = () => {
             </div>
           </div>
         )}
+        </main>
       </div>
 
       {/* MODALS */}

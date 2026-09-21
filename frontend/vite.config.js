@@ -8,8 +8,15 @@ export default defineConfig({
   },
   esbuild: {
     loader: 'jsx',
-    include: /src[\\/].*\.[jt]sx?$/,
+    include: /src\/.*\.jsx?$/,
     exclude: [],
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
   },
   server: {
     port: 3000,

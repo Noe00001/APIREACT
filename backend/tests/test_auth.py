@@ -25,8 +25,8 @@ def test_login_credenciales_invalidas(client):
 
 def test_registro_cliente_exitoso(client):
     payload = {
-        "nombre": "Carlos",
-        "apellido": "Gómez",
+        "nombre": "Carlos Alberto",
+        "apellido": "Gómez Pérez",
         "tipoDocumento": "CC",
         "numeroDocumento": "8877665544",
         "direccion": "Avenida Siempre Viva 742",
@@ -41,8 +41,8 @@ def test_registro_cliente_exitoso(client):
 
 def test_registro_duplicado_conflicto(client):
     payload = {
-        "nombre": "Carlos",
-        "apellido": "Gómez",
+        "nombre": "Carlos Alberto",
+        "apellido": "Gómez Pérez",
         "tipoDocumento": "CC",
         "numeroDocumento": "8877665544",
         "direccion": "Avenida Siempre Viva 742",

@@ -73,8 +73,13 @@ const RecoverPassword = ({ onSent, defaultEmail }) => {
           {serverMessage && <p className="form-server-error" role="status">{serverMessage}</p>}
         </form>
         {resetToken && (
-          <form onSubmit={handleReset} className="auth-form reset-form">
-            <p>Token temporal generado. Define una nueva contraseña para recuperar tu cuenta.</p>
+          <form onSubmit={handleReset} className="auth-form reset-form" style={{ marginTop: '2rem', padding: '1.5rem', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px' }}>
+            <h4 style={{ color: '#166534', marginBottom: '1rem' }}>¡Solicitud aprobada!</h4>
+            <p style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#166534' }}>
+              Para fines de desarrollo, aquí está tu token de recuperación generado por el servidor:
+              <br/><code style={{ wordBreak: 'break-all', background: '#dcfce3', padding: '4px', borderRadius: '4px', display: 'block', marginTop: '4px' }}>{resetToken}</code>
+            </p>
+            <p style={{ marginBottom: '1rem', fontSize: '0.9rem' }}>Define una nueva contraseña para recuperar tu cuenta.</p>
             <Input label="Nueva contraseña" id="reset-password" type="password" value={newPassword} onChange={(event) => setNewPassword(event.target.value)} />
             <Input label="Confirmar nueva contraseña" id="reset-confirm" type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
             <Button type="submit" variant="primary" disabled={submitting}>{submitting ? 'Actualizando...' : 'Actualizar contraseña'}</Button>

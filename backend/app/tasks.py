@@ -4,7 +4,7 @@ Permite ejecutar procesos asíncronos como registros de auditoría y notificacio
 """
 import logging
 from app.database import SessionLocal
-from app.models import AuditoriaLog
+from app.models.models import AuditoriaLog
 
 logger = logging.getLogger("cafe_cato.tasks")
 

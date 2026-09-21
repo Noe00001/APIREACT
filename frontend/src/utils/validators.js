@@ -10,15 +10,18 @@ export function validateEmail(value) {
 
 export function validatePassword(value) {
   if (!value) return 'La contraseña es requerida';
-  if (value.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
-  if (value.length > 128) return 'La contraseña es demasiado larga';
+  if (value.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
+  if (value.length > 50) return 'La contraseña es demasiado larga (máx 50)';
+  if (!/[A-Z]/.test(value)) return 'Debe contener al menos una letra mayúscula';
+  if (!/[0-9]/.test(value)) return 'Debe contener al menos un número';
   return '';
 }
 
 export function validateName(value) {
   if (!value) return 'Requerido';
-  if (value.length < 2) return 'Muy corto';
-  if (value.length > 50) return 'Muy largo';
+  if (value.length < 10) return 'Muy corto (mín 10 caracteres)';
+  if (value.length > 20) return 'Muy largo (máx 20 caracteres)';
+  if (!/^[A-Za-záéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) return 'Solo letras y espacios';
   return '';
 }
 

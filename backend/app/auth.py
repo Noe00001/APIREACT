@@ -16,7 +16,7 @@ import bcrypt
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Usuario
+from app.models.models import Usuario
 
 load_dotenv()
 

@@ -16,7 +16,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import init_db
-from app.routes import auth, users, products, services, gatos, ia
+from app.controllers import auth, users, products, services, gatos, ia
 
 # Configuración básica de logs
 logging.basicConfig(
