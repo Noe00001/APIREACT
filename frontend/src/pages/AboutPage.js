@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Coffee, PawPrint, Moon, Camera, Sparkles, Ban } from 'lucide-react';
 
 const AboutPage = () => {
   return (
@@ -16,7 +17,7 @@ const AboutPage = () => {
       {/* Story & Philosophy */}
       <section className="about-story-grid">
         <div className="about-story-card">
-          <span className="about-card-icon">☕</span>
+          <span className="about-card-icon"><Coffee size={36} /></span>
           <h3>Nuestra Filosofía</h3>
           <p>
             Creemos en las pausas conscientes. En un mundo acelerado, nuestro café ofrece un refugio de calma,
@@ -26,7 +27,7 @@ const AboutPage = () => {
         </div>
 
         <div className="about-story-card">
-          <span className="about-card-icon">🐾</span>
+          <span className="about-card-icon"><PawPrint size={36} /></span>
           <h3>Compromiso y Rescate</h3>
           <p>
             No somos solo una cafetería: somos un puente hacia una nueva vida para felinos en situación de vulnerabilidad.
@@ -93,7 +94,7 @@ const AboutPage = () => {
 
         <div className="rules-list-grid">
           <div className="rule-box">
-            <span className="rule-emoji">😴</span>
+            <span className="rule-emoji"><Moon size={28} /></span>
             <div>
               <strong>Respeta sus horas de siesta</strong>
               <p>Si un gatito está durmiendo plácidamente, permítele descansar sin moverlo.</p>
@@ -101,7 +102,7 @@ const AboutPage = () => {
           </div>
 
           <div className="rule-box">
-            <span className="rule-emoji">📸</span>
+            <span className="rule-emoji"><Camera size={28} /></span>
             <div>
               <strong>Fotografías sin flash</strong>
               <p>Los ojos de los gatos son hipersensibles a la luz brillante.</p>
@@ -109,7 +110,7 @@ const AboutPage = () => {
           </div>
 
           <div className="rule-box">
-            <span className="rule-emoji">🧼</span>
+            <span className="rule-emoji"><Sparkles size={28} /></span>
             <div>
               <strong>Higiene antes de interactuar</strong>
               <p>Desinfecta tus manos en nuestras estaciones antes y después de acariciarlos.</p>
@@ -117,7 +118,7 @@ const AboutPage = () => {
           </div>
 
           <div className="rule-box">
-            <span className="rule-emoji">🚫</span>
+            <span className="rule-emoji"><Ban size={28} /></span>
             <div>
               <strong>No darles comida humana</strong>
               <p>Nuestros pasteles y cafés son deliciosos para ti, pero pueden ser tóxicos para ellos.</p>

@@ -18,8 +18,8 @@ class LoginRequest(BaseModel):
 
 
 class RegisterRequest(BaseModel):
-    nombre: str = Field(..., min_length=10, max_length=20, description="Nombre del usuario", examples=["Salomé"])
-    apellido: str = Field(..., min_length=10, max_length=20, description="Apellido del usuario", examples=["López"])
+    nombre: str = Field(..., min_length=2, max_length=50, description="Nombre del usuario", examples=["Salomé"])
+    apellido: str = Field(..., min_length=2, max_length=50, description="Apellido del usuario", examples=["López"])
     tipoDocumento: str = Field(..., min_length=2, max_length=20, description="Tipo de identificación", examples=["CC"])
     numeroDocumento: str = Field(..., min_length=6, max_length=12, description="Número de documento", examples=["1020304050"])
     direccion: str = Field(..., min_length=5, max_length=120, description="Dirección de residencia", examples=["Calle 45 # 12-34"])
@@ -106,8 +106,8 @@ class UsuarioOut(BaseModel):
 
 
 class UsuarioCreate(BaseModel):
-    nombre: str = Field(..., min_length=10, max_length=20)
-    apellido: str = Field(..., min_length=10, max_length=20)
+    nombre: str = Field(..., min_length=2, max_length=50)
+    apellido: str = Field(..., min_length=2, max_length=50)
     tipoDocumento: str = Field(..., min_length=2, max_length=20)
     numeroDocumento: str = Field(..., min_length=6, max_length=12)
     direccion: str = Field(..., min_length=5, max_length=120)
@@ -126,8 +126,8 @@ class UsuarioCreate(BaseModel):
 
 
 class UsuarioUpdate(BaseModel):
-    nombre: str = Field(..., min_length=10, max_length=20)
-    apellido: str = Field(..., min_length=10, max_length=20)
+    nombre: str = Field(..., min_length=2, max_length=50)
+    apellido: str = Field(..., min_length=2, max_length=50)
     direccion: str = Field(..., min_length=5, max_length=120)
     telefono: str = Field(..., min_length=7, max_length=15)
     email: EmailStr
@@ -338,3 +338,164 @@ class RecomendacionIAResponse(BaseModel):
     maridaje_sugerido: str = Field(..., description="Acompañamiento o postre recomendado")
     gato_companero: Optional[str] = Field(None, description="Gatito en adopción recomendado para acompañar la visita")
     modelo_ia_utilizado: str = Field(..., description="Nombre del modelo o motor de IA ejecutado")
+
+
+# ─────────────────────────────────────────────────────────────
+# 7. Esquemas Quinto Avance: Ventas, Facturas, PQR, Chatbot, Dashboards
+# ─────────────────────────────────────────────────────────────
+
+# --- MÓDULO DE VENTAS ---
+class DetalleVentaCreate(BaseModel):
+    tipo_item: str = Field("Producto", description="Tipo: Producto o Servicio")
+    producto_id: Optional[int] = Field(None, description="ID del producto si aplica")
+    servicio_id: Optional[int] = Field(None, description="ID del servicio si aplica")
+    nombre_item: str = Field(..., min_length=2, max_length=150, description="Nombre descriptivo del producto/servicio")
+    cantidad: int = Field(1, ge=1, description="Cantidad vendida")
+    precio_unitario: float = Field(..., ge=0, description="Precio unitario")
+    subtotal: Optional[float] = Field(None, ge=0, description="Subtotal de la línea")
+
+
+class DetalleVentaOut(BaseModel):
+    id: int
+    venta_id: int
+    tipo_item: str
+    producto_id: Optional[int] = None
+    servicio_id: Optional[int] = None
+    nombre_item: str
+    cantidad: int
+    precio_unitario: float
+    subtotal: float
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class VentaCreate(BaseModel):
+    cliente_id: Optional[int] = Field(None, description="ID del cliente comprador (opcional si se deduce del token)")
+    metodo_pago: str = Field("Efectivo", description="Efectivo, Tarjeta de Crédito, Tarjeta de Débito, Transferencia")
+    descuentos: float = Field(0.0, ge=0, description="Valor total de descuentos aplicados")
+    impuestos: float = Field(0.0, ge=0, description="Valor de impuestos aplicados")
+    detalles: List[DetalleVentaCreate] = Field(..., min_length=1, description="Lista de productos y servicios vendidos")
+
+
+class VentaOut(BaseModel):
+    id: int
+    numero_venta: str
+    cliente_id: int
+    cliente_nombre: Optional[str] = None
+    cliente_documento: Optional[str] = None
+    operador_id: int
+    operador_nombre: Optional[str] = None
+    subtotal: float
+    descuentos: float
+    impuestos: float
+    total: float
+    metodo_pago: str
+    estado: str
+    fecha_hora: datetime
+    detalles: List[DetalleVentaOut] = []
+    factura_id: Optional[int] = None
+    numero_factura: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- REPORTES Y FACTURACIÓN ---
+class DetalleFacturaOut(BaseModel):
+    id: int
+    factura_id: int
+    descripcion: str
+    cantidad: int
+    precio_unitario: float
+    subtotal: float
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class FacturaOut(BaseModel):
+    id: int
+    numero_factura: str
+    venta_id: int
+    numero_venta: Optional[str] = None
+    cliente_id: int
+    cliente_nombre: Optional[str] = None
+    cliente_documento: Optional[str] = None
+    cliente_email: Optional[str] = None
+    cliente_telefono: Optional[str] = None
+    cliente_direccion: Optional[str] = None
+    fecha_emision: datetime
+    subtotal: float
+    impuestos: float
+    total: float
+    estado: str
+    detalles: List[DetalleFacturaOut] = []
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- MÓDULO PQR ---
+class PQRCreate(BaseModel):
+    tipo: str = Field("Peticion", description="Peticion, Queja, Reclamo o Sugerencia")
+    asunto: str = Field(..., min_length=3, max_length=150, description="Asunto breve de la PQR")
+    descripcion: str = Field(..., min_length=5, description="Descripción detallada de la solicitud")
+
+
+class PQRRespuesta(BaseModel):
+    respuesta: str = Field(..., min_length=3, description="Texto de respuesta formal a la PQR")
+    estado: str = Field("Respondida", description="Estado final: En Proceso, Respondida, Cerrada")
+
+
+class PQROut(BaseModel):
+    id: int
+    radicado: str
+    cliente_id: int
+    cliente_nombre: Optional[str] = None
+    cliente_email: Optional[str] = None
+    tipo: str
+    asunto: str
+    descripcion: str
+    estado: str
+    respuesta: Optional[str] = None
+    respondido_por: Optional[int] = None
+    respondido_por_nombre: Optional[str] = None
+    fecha_creacion: datetime
+    fecha_respuesta: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# --- CHATBOT & IA ---
+class ChatbotMessageRequest(BaseModel):
+    session_id: Optional[str] = Field(None, description="Identificador único de la sesión de chat")
+    message: str = Field(..., min_length=1, description="Pregunta o consulta del usuario")
+
+
+class ChatbotMessageResponse(BaseModel):
+    session_id: str
+    reply: str
+    sender: str = "asistente"
+    timestamp: datetime = Field(default_factory=datetime.now)
+
+
+# --- DASHBOARDS Y ANALÍTICA ---
+class DashboardKPIsOut(BaseModel):
+    total_usuarios: int
+    total_productos: int
+    total_servicios: int
+    total_ventas: int
+    facturacion_total: float
+    ventas_hoy: float
+    pqrs_recibidas: int
+    pqrs_pendientes: int
+
+
+class ChartItem(BaseModel):
+    label: str
+    valor: float
+    cantidad: int
+
+
+class DashboardAnalyticsOut(BaseModel):
+    kpis: DashboardKPIsOut
+    ventas_por_dia: List[ChartItem]
+    ventas_por_categoria: List[ChartItem]
+    top_mas_vendidos: List[ChartItem]

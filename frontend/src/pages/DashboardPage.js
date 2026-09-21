@@ -19,6 +19,7 @@ import {
 import AdminCatalogForm from '../components/AdminCatalogForm';
 import UserModal from '../components/UserModal';
 import CatalogItemModal from '../components/CatalogItemModal';
+import { Users, Coffee, Sparkles, PawPrint, SlidersHorizontal, X } from 'lucide-react';
 
 const DashboardPage = () => {
   let user = null;
@@ -225,43 +226,43 @@ const DashboardPage = () => {
                 type="button"
                 className={`sidebar-link ${activeTab === 'usuarios' ? 'active' : ''}`}
                 onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
-                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'usuarios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'usuarios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'usuarios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'usuarios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
               >
-                👥 Usuarios ({users.length})
+                <Users size={18} /> Usuarios ({users.length})
               </button>
             )}
             <button
               type="button"
               className={`sidebar-link ${activeTab === 'productos' ? 'active' : ''}`}
               onClick={() => { setActiveTab('productos'); setSearchTerm(''); }}
-              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'productos' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'productos' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'productos' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'productos' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
-              ☕ Productos ({products.length})
+              <Coffee size={18} /> Productos ({products.length})
             </button>
             <button
               type="button"
               className={`sidebar-link ${activeTab === 'servicios' ? 'active' : ''}`}
               onClick={() => { setActiveTab('servicios'); setSearchTerm(''); }}
-              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'servicios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'servicios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'servicios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'servicios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
-              🍰 Servicios ({services.length})
+              <Sparkles size={18} /> Servicios ({services.length})
             </button>
             <button
               type="button"
               className={`sidebar-link ${activeTab === 'gatos' ? 'active' : ''}`}
               onClick={() => { setActiveTab('gatos'); setSearchTerm(''); }}
-              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'gatos' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'gatos' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'gatos' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'gatos' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
-              🐾 Gatos ({gatos.length})
+              <PawPrint size={18} /> Gatos ({gatos.length})
             </button>
             {user.rol === 'Administrador' && (
               <button
                 type="button"
                 className={`sidebar-link ${activeTab === 'catalogo' ? 'active' : ''}`}
                 onClick={() => { setActiveTab('catalogo'); setSearchTerm(''); }}
-                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'catalogo' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'catalogo' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}
+                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'catalogo' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'catalogo' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
               >
-                ⚙️ Gestión Rápida
+                <SlidersHorizontal size={18} /> Gestión Rápida
               </button>
             )}
           </nav>
@@ -318,7 +319,7 @@ const DashboardPage = () => {
                 className="clear-search-btn"
                 onClick={() => setSearchTerm('')}
               >
-                ✕
+                <X size={16} />
               </button>
             )}
           </div>
@@ -473,7 +474,7 @@ const DashboardPage = () => {
                         {item.imagen ? (
                           <img src={item.imagen} alt={item.nombre} className="table-thumbnail" />
                         ) : (
-                          <span className="no-thumbnail">☕</span>
+                          <span className="no-thumbnail"><Coffee size={20} /></span>
                         )}
                       </td>
                       <td><strong>{item.nombre}</strong></td>
@@ -560,7 +561,7 @@ const DashboardPage = () => {
                         {item.imagen ? (
                           <img src={item.imagen} alt={item.nombre} className="table-thumbnail" />
                         ) : (
-                          <span className="no-thumbnail">🍰</span>
+                          <span className="no-thumbnail"><Sparkles size={20} /></span>
                         )}
                       </td>
                       <td><strong>{item.nombre}</strong></td>
@@ -651,7 +652,7 @@ const DashboardPage = () => {
                         {item.imagen ? (
                           <img src={item.imagen} alt={item.nombre} className="table-thumbnail round" />
                         ) : (
-                          <span className="no-thumbnail">🐾</span>
+                          <span className="no-thumbnail"><PawPrint size={20} /></span>
                         )}
                       </td>
                       <td><strong>{item.nombre}</strong></td>
@@ -716,7 +717,7 @@ const DashboardPage = () => {
 
             <div className="catalog-management-grid">
               <div>
-                <h4>☕ Productos ({products.length})</h4>
+                <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Coffee size={18} /> Productos ({products.length})</h4>
                 {products.map((item) => (
                   <div className="catalog-management-item" key={`quick-p-${item.id}`}>
                     <span>
@@ -732,7 +733,7 @@ const DashboardPage = () => {
               </div>
 
               <div>
-                <h4>🍰 Servicios ({services.length})</h4>
+                <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Sparkles size={18} /> Servicios ({services.length})</h4>
                 {services.map((item) => (
                   <div className="catalog-management-item" key={`quick-s-${item.id}`}>
                     <span>
@@ -748,7 +749,7 @@ const DashboardPage = () => {
               </div>
 
               <div>
-                <h4>🐾 Gatos ({gatos.length})</h4>
+                <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><PawPrint size={18} /> Gatos ({gatos.length})</h4>
                 {gatos.map((item) => (
                   <div className="catalog-management-item" key={`quick-g-${item.id}`}>
                     <span>

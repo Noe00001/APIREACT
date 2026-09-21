@@ -16,7 +16,10 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import init_db
-from app.controllers import auth, users, products, services, gatos, ia
+from app.controllers import (
+    auth, users, products, services, gatos, ia,
+    ventas, facturas, reportes, pqr, chatbot, analytics
+)
 
 # Configuración básica de logs
 logging.basicConfig(
@@ -183,12 +186,20 @@ app.include_router(products.router)
 app.include_router(services.router)
 app.include_router(gatos.router)
 app.include_router(ia.router)
+app.include_router(ventas.router)
+app.include_router(facturas.router)
+app.include_router(reportes.router)
+app.include_router(pqr.router)
+app.include_router(chatbot.router)
+app.include_router(analytics.router)
 
 
 # ─────────────────────────────────────────────
-# Endpoint Raíz (Health check)
+# Endpoint Raíz y Health Check
 # ─────────────────────────────────────────────
 @app.get("/", tags=["Root"], summary="Health check de la API")
+@app.get("/api/health", tags=["Root"], summary="Health check de la API")
+@app.get("/health", tags=["Root"], summary="Health check de la API")
 async def root():
     return {
         "sistema": "Café Cato API",

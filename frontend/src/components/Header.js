@@ -39,15 +39,7 @@ const Header = ({ theme, toggleTheme }) => {
     navigate('/');
   };
 
-  const handleGalleryClick = (e) => {
-    if (location.pathname === '/') {
-      const el = document.getElementById('galeria');
-      if (el) {
-        e.preventDefault();
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
+
 
   return (
     <header className="site-header">
@@ -58,8 +50,8 @@ const Header = ({ theme, toggleTheme }) => {
             <span className="site-brand-text">Café Salome</span>
           </Link>
           <nav className="site-nav" aria-label="Navegación principal">
-            <Link to="/" className={location.pathname === '/' ? 'active-nav-link' : ''}>Inicio</Link>
-            <a href="/#galeria" onClick={handleGalleryClick}>Galería</a>
+            <Link to="/" className={location.pathname === '/' && location.hash !== '#galeria' ? 'active-nav-link' : ''}>Inicio</Link>
+            <a href="/#galeria" className={location.pathname === '/' && location.hash === '#galeria' ? 'active-nav-link' : ''}>Galería</a>
             <Link to="/quienes-somos" className={location.pathname === '/quienes-somos' ? 'active-nav-link' : ''}>Quiénes Somos</Link>
             <Link to="/contacto" className={location.pathname === '/contacto' ? 'active-nav-link' : ''}>Contacto</Link>
           </nav>

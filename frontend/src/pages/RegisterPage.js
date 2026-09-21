@@ -117,8 +117,8 @@ const RegisterPage = () => {
             <div style={{ gridColumn: '1 / -1', marginBottom: '1rem' }}>
               <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-color)', opacity: 0.8 }}>Continuando como: <strong>{form.email}</strong> <button type="button" onClick={() => setStep(1)} style={{ background: 'none', border: 'none', color: 'var(--brand-color)', textDecoration: 'underline', cursor: 'pointer', marginLeft: '8px' }}>(Cambiar)</button></p>
             </div>
-            <Input label="Nombre (10-20 char)" id="reg-nombre" value={form.nombre} onChange={handleChange('nombre')} error={errors.nombre} />
-            <Input label="Apellido (10-20 char)" id="reg-apellido" value={form.apellido} onChange={handleChange('apellido')} error={errors.apellido} />
+            <Input label="Nombre" id="reg-nombre" value={form.nombre} onChange={handleChange('nombre')} error={errors.nombre} />
+            <Input label="Apellido" id="reg-apellido" value={form.apellido} onChange={handleChange('apellido')} error={errors.apellido} />
             <Input label="Tipo de documento" id="reg-tipodoc" value={form.tipoDocumento} onChange={handleChange('tipoDocumento')} />
             <Input label="Número de documento" id="reg-numdoc" value={form.numeroDocumento} onChange={handleChange('numeroDocumento')} error={errors.numeroDocumento} />
             <Input label="Dirección" id="reg-direccion" value={form.direccion} onChange={handleChange('direccion')} />

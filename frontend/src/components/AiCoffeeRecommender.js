@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getAiRecommendation } from '../services/api';
+import { Bot, Coffee, Zap, Smile, Cookie, PawPrint, Sparkles, AlertTriangle, Cpu, UtensilsCrossed } from 'lucide-react';
 
 const AiCoffeeRecommender = () => {
   const [estadoAnimo, setEstadoAnimo] = useState('Productivo y enfocado');
@@ -10,11 +11,11 @@ const AiCoffeeRecommender = () => {
   const [error, setError] = useState('');
 
   const estadosPredefinidos = [
-    '☕ Productivo y enfocado',
-    '😴 Cansado, necesito energía urgente',
-    '🧘 Tranquilo y buscando relax',
-    '🍰 Antojado de algo dulce',
-    '😺 En busca de mimos felinos',
+    { id: 'Productivo y enfocado', label: 'Productivo y enfocado', icon: Coffee },
+    { id: 'Cansado, necesito energía urgente', label: 'Cansado, necesito energía urgente', icon: Zap },
+    { id: 'Tranquilo y buscando relax', label: 'Tranquilo y buscando relax', icon: Smile },
+    { id: 'Antojado de algo dulce', label: 'Antojado de algo dulce', icon: Cookie },
+    { id: 'En busca de mimos felinos', label: 'En busca de mimos felinos', icon: PawPrint },
   ];
 
   const handleConsultar = async (e) => {
@@ -40,7 +41,7 @@ const AiCoffeeRecommender = () => {
   return (
     <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 rounded-3xl p-6 sm:p-8 shadow-xl border border-amber-200 my-8">
       <div className="flex items-center space-x-3 mb-4">
-        <span className="text-3xl">🤖</span>
+        <Bot size={36} className="text-amber-800" />
         <div>
           <h2 className="text-2xl font-bold text-amber-950 font-serif">
             Sommelier de Café & Cat Matchmaker con IA
@@ -57,23 +58,21 @@ const AiCoffeeRecommender = () => {
             ¿Cómo te sientes o qué necesitas hoy?
           </label>
           <div className="flex flex-wrap gap-2 mb-2">
-            {estadosPredefinidos.map((estado) => {
-              const limpio = estado.replace(/^[^\s]+\s/, '');
-              return (
-                <button
-                  key={estado}
-                  type="button"
-                  onClick={() => setEstadoAnimo(limpio)}
-                  className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
-                    estadoAnimo === limpio
-                      ? 'bg-amber-700 text-white border-amber-700 shadow-sm'
-                      : 'bg-white text-amber-900 border-amber-300 hover:bg-amber-100'
-                  }`}
-                >
-                  {estado}
-                </button>
-              );
-            })}
+            {estadosPredefinidos.map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setEstadoAnimo(id)}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-all inline-flex items-center gap-1.5 ${
+                  estadoAnimo === id
+                    ? 'bg-amber-700 text-white border-amber-700 shadow-sm'
+                    : 'bg-white text-amber-900 border-amber-300 hover:bg-amber-100'
+                }`}
+              >
+                <Icon size={14} />
+                <span>{label}</span>
+              </button>
+            ))}
           </div>
           <input
             type="text"
@@ -111,8 +110,8 @@ const AiCoffeeRecommender = () => {
                 onChange={(e) => setGustaGatos(e.target.checked)}
                 className="w-5 h-5 text-amber-600 rounded border-amber-300 focus:ring-amber-500 cursor-pointer"
               />
-              <span className="text-sm font-semibold text-amber-950">
-                🐾 Recomendarme un gatito para consentir
+              <span className="text-sm font-semibold text-amber-950 inline-flex items-center gap-1.5">
+                <PawPrint size={16} /> Recomendarme un gatito para consentir
               </span>
             </label>
           </div>
@@ -133,7 +132,7 @@ const AiCoffeeRecommender = () => {
             </>
           ) : (
             <>
-              <span>✨ Obtener Recomendación Inteligente</span>
+              <span className="inline-flex items-center gap-2"><Sparkles size={18} /> Obtener Recomendación Inteligente</span>
             </>
           )}
         </button>
@@ -142,7 +141,7 @@ const AiCoffeeRecommender = () => {
       {/* Manejo de estados de error */}
       {error && (
         <div className="mt-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center space-x-2">
-          <span>⚠️</span>
+          <AlertTriangle size={18} className="shrink-0" />
           <span>{error}</span>
         </div>
       )}
@@ -151,8 +150,8 @@ const AiCoffeeRecommender = () => {
       {resultado && (
         <div className="mt-6 bg-white rounded-2xl p-6 border border-amber-200 shadow-md animate-fade-in space-y-4">
           <div className="border-b border-amber-100 pb-3 flex flex-wrap justify-between items-center gap-2">
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
-              ⚡ Motor: {resultado.modelo_ia_utilizado}
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 inline-flex items-center gap-1">
+              <Cpu size={14} /> Motor: {resultado.modelo_ia_utilizado}
             </span>
             <span className="text-xs text-amber-700">Café Cato Artificial Intelligence</span>
           </div>
@@ -163,8 +162,8 @@ const AiCoffeeRecommender = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
             <div className="p-3 bg-amber-50 rounded-xl border border-amber-200">
-              <span className="text-xs uppercase tracking-wider text-amber-700 font-bold block">
-                ☕ Café Recomendado
+              <span className="text-xs uppercase tracking-wider text-amber-700 font-bold flex items-center gap-1.5 mb-1">
+                <Coffee size={14} /> Café Recomendado
               </span>
               <span className="text-base font-bold text-amber-950">
                 {resultado.cafe_recomendado}
@@ -172,8 +171,8 @@ const AiCoffeeRecommender = () => {
             </div>
 
             <div className="p-3 bg-orange-50 rounded-xl border border-orange-200">
-              <span className="text-xs uppercase tracking-wider text-orange-700 font-bold block">
-                🥐 Maridaje Sugerido
+              <span className="text-xs uppercase tracking-wider text-orange-700 font-bold flex items-center gap-1.5 mb-1">
+                <UtensilsCrossed size={14} /> Maridaje Sugerido
               </span>
               <span className="text-base font-bold text-orange-950">
                 {resultado.maridaje_sugerido}
@@ -182,8 +181,8 @@ const AiCoffeeRecommender = () => {
 
             {resultado.gato_companero && (
               <div className="p-3 bg-rose-50 rounded-xl border border-rose-200">
-                <span className="text-xs uppercase tracking-wider text-rose-700 font-bold block">
-                  🐱 Tu Compañero Felino
+                <span className="text-xs uppercase tracking-wider text-rose-700 font-bold flex items-center gap-1.5 mb-1">
+                  <PawPrint size={14} /> Tu Compañero Felino
                 </span>
                 <span className="text-base font-bold text-rose-950">
                   {resultado.gato_companero}

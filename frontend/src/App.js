@@ -33,6 +33,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/recover" element={<RecoverPasswordPage />} />
             <Route path="/panel" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           </Routes>
         </main>
         <WhatsAppButton />

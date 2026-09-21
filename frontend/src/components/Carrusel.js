@@ -91,10 +91,10 @@ export const Carrusel = () => {
   };
 
   return (
-    <section id="galeria" className="carousel-section" aria-label="Galería de café">
+    <section id="carrusel" className="carousel-section" aria-label="Carrusel de destacados">
       <div className="carousel-header">
         <div>
-          <span className="section-label">Galería</span>
+          <span className="section-label">Destacados</span>
           <h2 className="carousel-title">Momentos de café</h2>
         </div>
         <div className="carousel-counter">{activeIndex + 1} / {slides.length}</div>

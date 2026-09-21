@@ -19,8 +19,8 @@ export function validatePassword(value) {
 
 export function validateName(value) {
   if (!value) return 'Requerido';
-  if (value.length < 10) return 'Muy corto (mín 10 caracteres)';
-  if (value.length > 20) return 'Muy largo (máx 20 caracteres)';
+  if (value.length < 2) return 'Muy corto (mínimo 2 caracteres)';
+  if (value.length > 50) return 'Muy largo (máximo 50 caracteres)';
   if (!/^[A-Za-záéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) return 'Solo letras y espacios';
   return '';
 }

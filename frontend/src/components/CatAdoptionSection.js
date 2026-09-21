@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getGatos } from '../services/api';
+import { PawPrint, Check, Heart } from 'lucide-react';
 
 const CatAdoptionSection = () => {
   const [gatos, setGatos] = useState([]);
@@ -23,7 +24,7 @@ const CatAdoptionSection = () => {
       <div className="category-section-header">
         <div className="category-title-wrap">
           <span className="category-badge-chip cat-chip">Categoría 3 • Adopciones</span>
-          <h2>🐾 Gatos en Adopción</h2>
+          <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><PawPrint size={24} /> Gatos en Adopción</h2>
           <p>Conoce a nuestros {displayedGatos.length} michis rescatados que esperan una familia responsable (Máx. 10).</p>
         </div>
         <span className="category-counter">{displayedGatos.length} michis disponibles</span>
@@ -47,7 +48,7 @@ const CatAdoptionSection = () => {
                     loading="lazy"
                   />
                 ) : (
-                  <div className="catalog-card-image catalog-card-image-empty">🐾 Sin foto</div>
+                  <div className="catalog-card-image catalog-card-image-empty" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><PawPrint size={18} /> Sin foto</div>
                 )}
                 <span className="cat-status-badge">Disponible</span>
               </div>
@@ -77,8 +78,8 @@ const CatAdoptionSection = () => {
                 </div>
 
                 <div className="health-badges-row">
-                  {gato.esterilizado && <span className="health-chip">✓ Esterilizado</span>}
-                  {gato.vacunado && <span className="health-chip">✓ Vacunado</span>}
+                  {gato.esterilizado && <span className="health-chip" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Check size={13} /> Esterilizado</span>}
+                  {gato.vacunado && <span className="health-chip" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Check size={13} /> Vacunado</span>}
                 </div>
 
                 <div className="card-footer-action">
@@ -86,8 +87,9 @@ const CatAdoptionSection = () => {
                     to="/contacto"
                     className="btn-adopt-cat"
                     title={`Solicitar adopción de ${gato.nombre}`}
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                   >
-                    💖 Conocer a {gato.nombre}
+                    <Heart size={16} /> Conocer a {gato.nombre}
                   </Link>
                 </div>
               </div>

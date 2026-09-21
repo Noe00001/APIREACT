@@ -1,10 +1,26 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Carrusel } from '../components/Carrusel';
+import GaleriaGrid from '../components/GaleriaGrid';
 import CatalogSection from '../components/CatalogSection';
-import CatAdoptionSection from '../components/CatAdoptionSection';
 import AiCoffeeRecommender from '../components/AiCoffeeRecommender';
 import { Coffee, Sparkles, PawPrint } from 'lucide-react';
 
 const HomePage = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
   return (
     <>
       <section className="hero-section">
@@ -27,8 +43,9 @@ const HomePage = () => {
         <AiCoffeeRecommender />
       </section>
 
+      <GaleriaGrid />
+
       <CatalogSection />
-      <CatAdoptionSection />
     </>
   );
 };

@@ -78,7 +78,11 @@ def init_db():
     Inicializa tablas y datos semilla iniciales si la base de datos está vacía.
     Garantiza que el proyecto funcione de inmediato al iniciarse.
     """
-    from app.models.models import Rol, Permiso, Usuario, Producto, Servicio, Gato
+    from app.models.models import (
+        Rol, Permiso, Usuario, Producto, Servicio, Gato,
+        Venta, DetalleVenta, Factura, DetalleFactura, PQR,
+        ConversacionChatbot, MensajeChatbot
+    )
     from app.auth import hash_password
 
     Base.metadata.create_all(bind=engine)
@@ -140,6 +144,25 @@ def init_db():
                 rol_id=roles_map["Empleado"].id,
             )
             db.add(empleado)
+            db.commit()
+
+        # 3.2 Sembrar usuario Cliente demo si no existe
+        cliente_email = "cliente@cafecato.com"
+        cliente = db.query(Usuario).filter(Usuario.email == cliente_email).first()
+        if not cliente:
+            cliente = Usuario(
+                nombre="Camila",
+                apellido="Restrepo",
+                tipo_documento="CC",
+                numero_documento="1098765432",
+                direccion="Circular 4 # 73-10",
+                telefono="3157890123",
+                email=cliente_email,
+                password_hash=hash_password("Cliente123*"),
+                estado="Activo",
+                rol_id=roles_map["Cliente"].id,
+            )
+            db.add(cliente)
             db.commit()
 
         # 4. Sembrar productos si no hay ninguno
@@ -230,3 +253,154 @@ def init_db():
             ]
             db.add_all(gatos_demo)
             db.commit()
+
+        # 7. Sembrar ventas y facturas iniciales si no existen
+        if db.query(Venta).count() == 0:
+            prod_espresso = db.query(Producto).filter(Producto.nombre.like("%Espresso%")).first()
+            prod_capu = db.query(Producto).filter(Producto.nombre.like("%Capuchino%")).first()
+            serv_gato = db.query(Servicio).filter(Servicio.nombre.like("%Gatoterapia%")).first()
+            cliente_demo = db.query(Usuario).filter(Usuario.email == "cliente@cafecato.com").first()
+            admin_demo = db.query(Usuario).filter(Usuario.email == "admin@cafecato.com").first()
+
+            if cliente_demo and admin_demo:
+                # Venta 1: Productos de cafetería
+                subtotal1 = 13300.0
+                total1 = 13300.0
+                v1 = Venta(
+                    numero_venta="VTA-2026-0001",
+                    cliente_id=cliente_demo.id,
+                    operador_id=admin_demo.id,
+                    subtotal=subtotal1,
+                    descuentos=0.0,
+                    impuestos=0.0,
+                    total=total1,
+                    metodo_pago="Tarjeta de Crédito",
+                    estado="Completada"
+                )
+                db.add(v1)
+                db.flush()
+
+                det1_1 = DetalleVenta(
+                    venta_id=v1.id,
+                    tipo_item="Producto",
+                    producto_id=prod_espresso.id if prod_espresso else None,
+                    nombre_item="Espresso Especial Café Cato",
+                    cantidad=1,
+                    precio_unitario=5500.0,
+                    subtotal=5500.0
+                )
+                det1_2 = DetalleVenta(
+                    venta_id=v1.id,
+                    tipo_item="Producto",
+                    producto_id=prod_capu.id if prod_capu else None,
+                    nombre_item="Capuchino Artesanal Vainilla",
+                    cantidad=1,
+                    precio_unitario=7800.0,
+                    subtotal=7800.0
+                )
+                db.add_all([det1_1, det1_2])
+
+                # Factura 1
+                f1 = Factura(
+                    numero_factura="FACT-2026-0001",
+                    venta_id=v1.id,
+                    cliente_id=cliente_demo.id,
+                    subtotal=subtotal1,
+                    impuestos=0.0,
+                    total=total1,
+                    estado="Pagada"
+                )
+                db.add(f1)
+                db.flush()
+
+                df1_1 = DetalleFactura(
+                    factura_id=f1.id,
+                    descripcion="Espresso Especial Café Cato x 1",
+                    cantidad=1,
+                    precio_unitario=5500.0,
+                    subtotal=5500.0
+                )
+                df1_2 = DetalleFactura(
+                    factura_id=f1.id,
+                    descripcion="Capuchino Artesanal Vainilla x 1",
+                    cantidad=1,
+                    precio_unitario=7800.0,
+                    subtotal=7800.0
+                )
+                db.add_all([df1_1, df1_2])
+
+                # Venta 2: Servicio de Gatoterapia
+                subtotal2 = 15000.0
+                total2 = 15000.0
+                v2 = Venta(
+                    numero_venta="VTA-2026-0002",
+                    cliente_id=cliente_demo.id,
+                    operador_id=admin_demo.id,
+                    subtotal=subtotal2,
+                    descuentos=0.0,
+                    impuestos=0.0,
+                    total=total2,
+                    metodo_pago="Efectivo",
+                    estado="Completada"
+                )
+                db.add(v2)
+                db.flush()
+
+                det2_1 = DetalleVenta(
+                    venta_id=v2.id,
+                    tipo_item="Servicio",
+                    servicio_id=serv_gato.id if serv_gato else None,
+                    nombre_item="Tarde de Gatoterapia & Café",
+                    cantidad=1,
+                    precio_unitario=15000.0,
+                    subtotal=15000.0
+                )
+                db.add(det2_1)
+
+                f2 = Factura(
+                    numero_factura="FACT-2026-0002",
+                    venta_id=v2.id,
+                    cliente_id=cliente_demo.id,
+                    subtotal=subtotal2,
+                    impuestos=0.0,
+                    total=total2,
+                    estado="Pagada"
+                )
+                db.add(f2)
+                db.flush()
+
+                df2_1 = DetalleFactura(
+                    factura_id=f2.id,
+                    descripcion="Tarde de Gatoterapia & Café x 1",
+                    cantidad=1,
+                    precio_unitario=15000.0,
+                    subtotal=15000.0
+                )
+                db.add(df2_1)
+                db.commit()
+
+        # 8. Sembrar PQRs de ejemplo si no existen
+        if db.query(PQR).count() == 0:
+            cliente_demo = db.query(Usuario).filter(Usuario.email == "cliente@cafecato.com").first()
+            admin_demo = db.query(Usuario).filter(Usuario.email == "admin@cafecato.com").first()
+            if cliente_demo:
+                pqr_demo1 = PQR(
+                    radicado="PQR-2026-001",
+                    cliente_id=cliente_demo.id,
+                    tipo="Peticion",
+                    asunto="Disponibilidad de leches vegetales",
+                    descripcion="Quisiera saber si tienen opciones con leche de avena o almendras para los capuchinos.",
+                    estado="Respondida",
+                    respuesta="¡Hola Camila! Sí, contamos con leche de almendras y avena sin costo adicional.",
+                    respondido_por=admin_demo.id if admin_demo else None
+                )
+                pqr_demo2 = PQR(
+                    radicado="PQR-2026-002",
+                    cliente_id=cliente_demo.id,
+                    tipo="Sugerencia",
+                    asunto="Horarios extendidos de gatoterapia los fines de semana",
+                    descripcion="Sería genial si los domingos pudieran extender el horario hasta las 7:00 pm.",
+                    estado="En Proceso"
+                )
+                db.add_all([pqr_demo1, pqr_demo2])
+                db.commit()

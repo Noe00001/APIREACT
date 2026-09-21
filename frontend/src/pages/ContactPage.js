@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Sparkles, MapPin, MessageSquare, Mail, Phone, MessageCircle } from 'lucide-react';
 
 const FAQ_ITEMS = [
   {
@@ -87,7 +88,7 @@ const ContactPage = () => {
 
           {submitted ? (
             <div className="contact-success-box">
-              <span className="success-icon">✨</span>
+              <span className="success-icon"><Sparkles size={24} /></span>
               <h4>¡Mensaje Recibido, {formData.nombre}!</h4>
               <p>
                 Hemos registrado tu solicitud para el motivo:{' '}
@@ -213,7 +214,7 @@ const ContactPage = () => {
         <div className="contact-info-sidebar">
           {/* Card: Location & Hours */}
           <div className="info-box-card">
-            <h4>📍 Ubicación y Horarios</h4>
+            <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><MapPin size={20} /> Ubicación y Horarios</h4>
             <p>
               <strong>Café Salome Cat Café</strong>
               <br />
@@ -235,24 +236,24 @@ const ContactPage = () => {
 
           {/* Card: Direct Channels */}
           <div className="info-box-card">
-            <h4>💬 Canales Directos</h4>
+            <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><MessageSquare size={20} /> Canales Directos</h4>
             <ul className="direct-channels-list">
               <li>
-                <span className="channel-icon">📧</span>
+                <span className="channel-icon"><Mail size={20} /></span>
                 <div>
                   <small>Correo Oficial</small>
                   <a href="mailto:lopez.salomeestrada@gmail.com">lopez.salomeestrada@gmail.com</a>
                 </div>
               </li>
               <li>
-                <span className="channel-icon">📱</span>
+                <span className="channel-icon"><Phone size={20} /></span>
                 <div>
                   <small>Línea de Atención</small>
                   <a href="tel:+573015528014">+57 301 5528014</a>
                 </div>
               </li>
               <li>
-                <span className="channel-icon">🟢</span>
+                <span className="channel-icon"><MessageCircle size={20} /></span>
                 <div>
                   <small>Chat de WhatsApp</small>
                   <a

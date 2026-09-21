@@ -4,9 +4,19 @@
  * Cumple Criterio 10: URL del backend por variable de entorno (import.meta.env.VITE_API_URL).
  */
 
+let viteEnvUrl = '';
+try {
+  // Safe evaluation to support both Vite ESM and Jest/Babel CommonJS
+  // eslint-disable-next-line no-new-func
+  viteEnvUrl = new Function('try { return import.meta.env?.VITE_API_URL; } catch(e) { return ""; }')();
+} catch (e) {
+  viteEnvUrl = '';
+}
+
 const API_URL =
-  import.meta.env?.VITE_API_URL ||
-  globalThis.__CAFE_API_URL__ ||
+  viteEnvUrl ||
+  (typeof globalThis !== 'undefined' && globalThis.__CAFE_API_URL__) ||
+  (typeof process !== 'undefined' && process.env && (process.env.VITE_API_URL || process.env.REACT_APP_API_URL)) ||
   'http://localhost:8000/api';
 
 /**

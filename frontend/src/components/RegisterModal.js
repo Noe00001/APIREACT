@@ -37,6 +37,8 @@ const RegisterModal = ({ isOpen, onClose, onRegistered }) => {
     let err = '';
     switch (k) {
       case 'nombre':
+        err = validators.validateName(value);
+        break;
       case 'apellido':
         err = validators.validateName(value);
         break;
@@ -127,8 +129,8 @@ const RegisterModal = ({ isOpen, onClose, onRegistered }) => {
             <div style={{ gridColumn: '1 / -1', marginBottom: '1rem' }}>
               <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-color)', opacity: 0.8 }}>Continuando como: <strong>{form.email}</strong> <button type="button" onClick={() => setStep(1)} style={{ background: 'none', border: 'none', color: 'var(--brand-color)', textDecoration: 'underline', cursor: 'pointer', marginLeft: '8px' }}>(Cambiar)</button></p>
             </div>
-            <Input label="Nombre (10-20 char)" id="modal-nombre" maxLength={50} value={form.nombre} onChange={handleChange('nombre')} error={errors.nombre} />
-            <Input label="Apellido (10-20 char)" id="modal-apellido" maxLength={50} value={form.apellido} onChange={handleChange('apellido')} error={errors.apellido} />
+            <Input label="Nombre" id="modal-nombre" maxLength={50} value={form.nombre} onChange={handleChange('nombre')} error={errors.nombre} />
+            <Input label="Apellido" id="modal-apellido" maxLength={50} value={form.apellido} onChange={handleChange('apellido')} error={errors.apellido} />
             <Input label="Tipo de documento" id="modal-tipodoc" maxLength={20} value={form.tipoDocumento} onChange={handleChange('tipoDocumento')} />
             <Input label="Número de documento" id="modal-numdoc" maxLength={12} value={form.numeroDocumento} onChange={handleChange('numeroDocumento')} error={errors.numeroDocumento} />
             <Input label="Dirección" id="modal-direccion" maxLength={120} value={form.direccion} onChange={handleChange('direccion')} />
