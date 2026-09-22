@@ -2,11 +2,17 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getGatos } from '../services/api';
 import { PawPrint, Check, Heart } from 'lucide-react';
+import placeholderImage from '../assets/images/placeholder.svg';
 
 const CatAdoptionSection = () => {
   const [gatos, setGatos] = useState([]);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const handleImageError = (event) => {
+    event.currentTarget.src = placeholderImage;
+    event.currentTarget.onerror = null;
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -46,6 +52,7 @@ const CatAdoptionSection = () => {
                     src={gato.imagen}
                     alt={gato.nombre}
                     loading="lazy"
+                    onError={handleImageError}
                   />
                 ) : (
                   <div className="catalog-card-image catalog-card-image-empty" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><PawPrint size={18} /> Sin foto</div>

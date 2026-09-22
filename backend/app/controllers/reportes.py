@@ -13,6 +13,7 @@ from sqlalchemy import desc
 
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+from openpyxl.utils import get_column_letter
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
@@ -221,9 +222,9 @@ def exportar_reporte_diario_excel(
     ws.row_dimensions[row_idx].height = 22
 
     # Ajuste automático de anchos de columna
-    for col in ws.columns:
+    for col_idx, col in enumerate(ws.columns, 1):
+        col_letter = get_column_letter(col_idx)
         max_len = 0
-        col_letter = col[0].column_letter
         for cell in col:
             if cell.row > 2 and cell.value:
                 max_len = max(max_len, len(str(cell.value)))

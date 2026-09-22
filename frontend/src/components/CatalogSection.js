@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getProducts, getServices, getGatos } from '../services/api';
 import { LayoutGrid, Coffee, Sparkles, PawPrint, Check, Heart } from 'lucide-react';
+import placeholderImage from '../assets/images/placeholder.svg';
 
 const CatalogSection = () => {
   const [products, setProducts] = useState([]);
@@ -30,6 +31,11 @@ const CatalogSection = () => {
     window.addEventListener('catalog-updated', loadCatalog);
     return () => window.removeEventListener('catalog-updated', loadCatalog);
   }, []);
+
+  const handleImageError = (event) => {
+    event.currentTarget.src = placeholderImage;
+    event.currentTarget.onerror = null;
+  };
 
   // Limitamos estrictamente a un máximo de 10 por categoría según requerimiento
   const displayedProducts = products.slice(0, 10);
@@ -107,6 +113,7 @@ const CatalogSection = () => {
                       alt={item.nombre}
                       className="catalog-card-image"
                       loading="lazy"
+                      onError={handleImageError}
                     />
                   ) : (
                     <div className="catalog-card-image catalog-card-image-empty" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Coffee size={18} /> Café Salome</div>
@@ -155,6 +162,7 @@ const CatalogSection = () => {
                       alt={item.nombre}
                       className="catalog-card-image"
                       loading="lazy"
+                      onError={handleImageError}
                     />
                   ) : (
                     <div className="catalog-card-image catalog-card-image-empty" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><Sparkles size={18} /> Experiencia</div>
@@ -206,6 +214,7 @@ const CatalogSection = () => {
                         src={gato.imagen}
                         alt={gato.nombre}
                         loading="lazy"
+                        onError={handleImageError}
                       />
                     ) : (
                       <div className="catalog-card-image catalog-card-image-empty" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}><PawPrint size={18} /> Sin foto</div>
@@ -268,7 +277,12 @@ const CatalogSection = () => {
             <button type="button" onClick={() => setSelectedCat(null)} style={{ position: 'absolute', top: '16px', right: '16px', background: '#f1f5f9', border: 'none', fontSize: '24px', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>&times;</button>
             <div style={{ textAlign: 'center' }}>
               {selectedCat.imagen ? (
-                <img src={selectedCat.imagen} alt={selectedCat.nombre} style={{ width: '100%', height: '280px', objectFit: 'cover', borderRadius: '16px', marginBottom: '20px' }} />
+                <img
+                  src={selectedCat.imagen}
+                  alt={selectedCat.nombre}
+                  onError={handleImageError}
+                  style={{ width: '100%', height: '280px', objectFit: 'cover', borderRadius: '16px', marginBottom: '20px' }}
+                />
               ) : (
                 <div style={{ width: '100%', height: '280px', backgroundColor: '#f1f5f9', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                   <PawPrint size={64} color="#94a3b8" />

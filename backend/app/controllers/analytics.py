@@ -130,14 +130,20 @@ def obtener_metricas_dashboard(
     ]
 
     # 3. Distribución por Categoría (Productos vs Servicios)
-    cat_map = {"Productos": {"valor": 0.0, "cantidad": 0}, "Servicios": {"valor": 0.0, "cantidad": 0}}
+    cat_map = {"Gatos": {"valor": 0.0, "cantidad": 0}, "Servicios": {"valor": 0.0, "cantidad": 0}, "Productos": {"valor": 0.0, "cantidad": 0}}
     top_items_map = {}
 
     for v in ventas_filtradas:
         if v.estado == "Cancelada":
             continue
         for d in v.detalles:
-            cat_key = "Productos" if d.tipo_item == "Producto" else "Servicios"
+            if d.tipo_item == "Gato":
+                cat_key = "Gatos"
+            elif d.tipo_item == "Servicio":
+                cat_key = "Servicios"
+            else:
+                cat_key = "Productos"
+            
             cat_map[cat_key]["valor"] += float(d.subtotal)
             cat_map[cat_key]["cantidad"] += d.cantidad
 

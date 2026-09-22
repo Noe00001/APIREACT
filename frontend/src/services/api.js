@@ -31,6 +31,7 @@ async function request(path, options = {}) {
   let response;
   try {
     response = await fetch(`${API_URL}${path}`, {
+      cache: 'no-store',
       ...options,
       headers: {
         'Content-Type': 'application/json',
@@ -159,3 +160,99 @@ export const deleteGato = (id) =>
 // ─── 6. Inteligencia Artificial (Criterio 7) ─────────────────────────────────────
 export const getAiRecommendation = (payload) =>
   request('/ia/recomendar', { method: 'POST', body: JSON.stringify(payload) });
+
+// ─── 7. Ventas ───────────────────────────────────────────────────────────────────
+export const getVentas = (filters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.fecha_inicio) params.append('fecha_inicio', filters.fecha_inicio);
+  if (filters.fecha_fin) params.append('fecha_fin', filters.fecha_fin);
+  if (filters.cliente_id) params.append('cliente_id', filters.cliente_id);
+  if (filters.estado) params.append('estado', filters.estado);
+  if (filters.search) params.append('search', filters.search);
+  const qs = params.toString();
+  return request(`/ventas${qs ? `?${qs}` : ''}`);
+};
+
+export const getVentaById = (id) => request(`/ventas/${id}`);
+
+export const createVenta = (payload) =>
+  request('/ventas/', { method: 'POST', body: JSON.stringify(payload) });
+
+export const updateVentaStatus = (id, nuevo_estado) =>
+  request(`/ventas/${id}/estado?nuevo_estado=${nuevo_estado}`, { method: 'PATCH' });
+
+// ─── 8. Facturas ─────────────────────────────────────────────────────────────────
+export const getFacturas = (filters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.search) params.append('search', filters.search);
+  const qs = params.toString();
+  return request(`/facturas${qs ? `?${qs}` : ''}`);
+};
+
+export const getFacturaById = (id) => request(`/facturas/${id}`);
+
+// Nota: La descarga de PDF y Excel a menudo es mejor hacerla construyendo la URL directamente y usando window.open() 
+// o un <a> tag, ya que `request` espera JSON y el archivo es un Blob. Exponemos la URL base aquí:
+export const getBaseApiUrl = () => API_URL;
+
+// ─── 9. Reportes ─────────────────────────────────────────────────────────────────
+export const downloadFile = async (path, filename) => {
+  const token = localStorage.getItem('cafe_salome_token') || sessionStorage.getItem('cafe_salome_token');
+  const response = await fetch(`${API_URL}${path}`, {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    }
+  });
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || 'Error al descargar el archivo');
+  }
+  
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.URL.revokeObjectURL(url);
+};
+
+// Rutas de reporte: /reportes/diario/pdf, /reportes/diario/excel, /reportes/factura/{id}/pdf
+
+// ─── 10. PQR (Peticiones, Quejas y Reclamos) ─────────────────────────────────────
+export const getPqrs = (filters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.estado) params.append('estado', filters.estado);
+  if (filters.tipo) params.append('tipo', filters.tipo);
+  const qs = params.toString();
+  return request(`/pqr${qs ? `?${qs}` : ''}`);
+};
+
+export const createPqr = (payload) =>
+  request('/pqr/', { method: 'POST', body: JSON.stringify(payload) });
+
+export const updatePqrStatus = (id, payload) =>
+  request(`/pqr/${id}/respuesta`, { method: 'PATCH', body: JSON.stringify(payload) });
+
+// ─── 11. Dashboards y Analítica ──────────────────────────────────────────────────
+export const getDashboardMetrics = (filters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.fecha_inicio) params.append('fecha_inicio', filters.fecha_inicio);
+  if (filters.fecha_fin) params.append('fecha_fin', filters.fecha_fin);
+  if (filters.cliente_id) params.append('cliente_id', filters.cliente_id);
+  if (filters.producto_id) params.append('producto_id', filters.producto_id);
+  if (filters.servicio_id) params.append('servicio_id', filters.servicio_id);
+  if (filters.estado) params.append('estado', filters.estado);
+  const qs = params.toString();
+  return request(`/analytics/dashboard${qs ? `?${qs}` : ''}`);
+};
+
+// ─── 12. Chatbot ─────────────────────────────────────────────────────────────────
+export const startChatSession = () =>
+  request('/chatbot/iniciar', { method: 'POST' });
+
+export const sendChatMessage = (payload) =>
+  request('/chatbot/chat', { method: 'POST', body: JSON.stringify(payload) });

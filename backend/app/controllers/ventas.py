@@ -35,6 +35,7 @@ def _map_venta_out(v: Venta) -> dict:
             "tipo_item": d.tipo_item,
             "producto_id": d.producto_id,
             "servicio_id": d.servicio_id,
+            "gato_id": d.gato_id,
             "nombre_item": d.nombre_item,
             "cantidad": d.cantidad,
             "precio_unitario": float(d.precio_unitario),
@@ -97,11 +98,18 @@ def registrar_venta(
             "tipo_item": item.tipo_item,
             "producto_id": item.producto_id,
             "servicio_id": item.servicio_id,
+            "gato_id": item.gato_id,
             "nombre_item": item.nombre_item,
             "cantidad": item.cantidad,
             "precio_unitario": item.precio_unitario,
             "subtotal": subtotal_item,
         })
+
+        if item.tipo_item == "Gato" and item.gato_id:
+            from app.models.models import Gato
+            gato_db = db.query(Gato).filter(Gato.id == item.gato_id).first()
+            if gato_db:
+                gato_db.estado = "Inactivo"  # Marcar como Adoptado
 
         detalles_factura_para_guardar.append({
             "descripcion": f"{item.nombre_item} x {item.cantidad}",
@@ -135,6 +143,7 @@ def registrar_venta(
             tipo_item=d["tipo_item"],
             producto_id=d["producto_id"],
             servicio_id=d["servicio_id"],
+            gato_id=d["gato_id"],
             nombre_item=d["nombre_item"],
             cantidad=d["cantidad"],
             precio_unitario=d["precio_unitario"],
@@ -178,6 +187,7 @@ def listar_ventas(
     cliente_id: Optional[int] = Query(None, description="Filtrar por cliente"),
     producto_id: Optional[int] = Query(None, description="Filtrar por producto"),
     servicio_id: Optional[int] = Query(None, description="Filtrar por servicio"),
+    gato_id: Optional[int] = Query(None, description="Filtrar por gato"),
     estado: Optional[str] = Query(None, description="Completada, Cancelada, Pendiente"),
     search: Optional[str] = Query(None, description="Buscar por número de venta o nombre de cliente"),
     db: Session = Depends(get_db),
@@ -207,12 +217,14 @@ def listar_ventas(
         except ValueError:
             pass
 
-    if producto_id or servicio_id:
+    if producto_id or servicio_id or gato_id:
         query = query.join(Venta.detalles)
         if producto_id:
             query = query.filter(DetalleVenta.producto_id == producto_id)
         if servicio_id:
             query = query.filter(DetalleVenta.servicio_id == servicio_id)
+        if gato_id:
+            query = query.filter(DetalleVenta.gato_id == gato_id)
 
     if search:
         s = f"%{search}%"

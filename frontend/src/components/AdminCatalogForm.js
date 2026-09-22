@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createGato, createProduct, createService } from '../services/api';
+import placeholderImage from '../assets/images/placeholder.svg';
 
 const initialForm = {
   nombre: '', descripcion: '', precio: '', imagen: '', edad: 1, raza: '', sexo: 'Macho', color: '', peso: '', esterilizado: false, vacunado: false,
@@ -38,6 +39,8 @@ const AdminCatalogForm = ({ onSaved }) => {
       return;
     }
 
+    const finalImagen = form.imagen && form.imagen.trim() ? form.imagen.trim() : null;
+
     if (type === 'gato') {
       if (Number(form.edad) < 0) {
         setMessage('La edad no puede ser negativa.');
@@ -56,7 +59,7 @@ const AdminCatalogForm = ({ onSaved }) => {
           peso: form.peso === '' ? null : Number(form.peso),
           esterilizado: Boolean(form.esterilizado),
           vacunado: Boolean(form.vacunado),
-          imagen: form.imagen,
+          imagen: finalImagen,
         });
         setForm(initialForm);
         setMessage('Gato agregado correctamente.');
@@ -69,15 +72,27 @@ const AdminCatalogForm = ({ onSaved }) => {
       return;
     }
 
-    if (form.precio === '' || Number(form.precio) < 0) {
+    const numPrecio = Number(form.precio);
+    if (form.precio === '' || isNaN(numPrecio) || numPrecio < 0) {
       setMessage('Escribe un precio válido.');
       return;
     }
+
+    if (type === 'producto' && numPrecio <= 0) {
+      setMessage('El precio de un producto debe ser mayor a 0 COP.');
+      return;
+    }
+
     setSaving(true);
     setMessage('');
     try {
       const action = type === 'producto' ? createProduct : createService;
-      await action({ nombre: form.nombre.trim(), descripcion: form.descripcion.trim(), precio: Number(form.precio), imagen: form.imagen });
+      await action({
+        nombre: form.nombre.trim(),
+        descripcion: form.descripcion.trim(),
+        precio: numPrecio,
+        imagen: finalImagen
+      });
       setForm(initialForm);
       setMessage(`${type === 'producto' ? 'Producto' : 'Servicio'} agregado correctamente.`);
       if (onSaved) onSaved();
@@ -114,7 +129,40 @@ const AdminCatalogForm = ({ onSaved }) => {
         ) : (
           <label>Precio<input name="precio" type="number" min="0" step="0.01" value={form.precio} onChange={handleChange} required /></label>
         )}
-        <label className="catalog-image-field">Imagen de la carta<input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageChange} required />{form.imagen && <img className="catalog-image-preview" src={form.imagen} alt="Vista previa del registro" />}</label>
+        <div className="catalog-image-field-wrap">
+          <label>URL de la imagen (opcional)
+            <input
+              name="imagen"
+              value={form.imagen}
+              onChange={handleChange}
+              placeholder="https://... o sube un archivo abajo"
+            />
+          </label>
+          <label className="catalog-image-field">
+            O subir archivo local:
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageChange} />
+          </label>
+          {form.imagen && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
+              <img
+                className="catalog-image-preview"
+                src={form.imagen}
+                alt="Vista previa del registro"
+                onError={(e) => {
+                  e.currentTarget.src = placeholderImage;
+                  e.currentTarget.onerror = null;
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => setForm((current) => ({ ...current, imagen: '' }))}
+                style={{ background: 'none', border: 'none', color: '#c0392b', cursor: 'pointer', fontSize: '0.85rem' }}
+              >
+                Quitar
+              </button>
+            </div>
+          )}
+        </div>
       </div>
       <button className="catalog-submit" type="submit" disabled={saving}>{saving ? 'Guardando...' : `Agregar ${type}`}</button>
       {message && <p className="form-server-error" role="status">{message}</p>}

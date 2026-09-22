@@ -154,9 +154,10 @@ class DetalleVenta(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     venta_id = Column(Integer, ForeignKey("ventas.id"), nullable=False)
-    tipo_item = Column(Enum("Producto", "Servicio"), nullable=False, default="Producto")
+    tipo_item = Column(Enum("Producto", "Servicio", "Gato"), nullable=False, default="Producto")
     producto_id = Column(Integer, ForeignKey("productos.id"), nullable=True)
     servicio_id = Column(Integer, ForeignKey("servicios.id"), nullable=True)
+    gato_id = Column(Integer, ForeignKey("gatos.id"), nullable=True)
     nombre_item = Column(String(150), nullable=False)
     cantidad = Column(Integer, nullable=False, default=1)
     precio_unitario = Column(DECIMAL(10, 2), nullable=False)
@@ -166,6 +167,7 @@ class DetalleVenta(Base):
     venta = relationship("Venta", back_populates="detalles")
     producto = relationship("Producto")
     servicio = relationship("Servicio")
+    gato = relationship("Gato")
 
 
 class Factura(Base):

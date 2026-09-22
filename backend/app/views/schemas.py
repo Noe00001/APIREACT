@@ -346,10 +346,11 @@ class RecomendacionIAResponse(BaseModel):
 
 # --- MÓDULO DE VENTAS ---
 class DetalleVentaCreate(BaseModel):
-    tipo_item: str = Field("Producto", description="Tipo: Producto o Servicio")
+    tipo_item: str = Field("Producto", description="Tipo: Producto, Servicio o Gato")
     producto_id: Optional[int] = Field(None, description="ID del producto si aplica")
     servicio_id: Optional[int] = Field(None, description="ID del servicio si aplica")
-    nombre_item: str = Field(..., min_length=2, max_length=150, description="Nombre descriptivo del producto/servicio")
+    gato_id: Optional[int] = Field(None, description="ID del gato si aplica")
+    nombre_item: str = Field(..., min_length=2, max_length=150, description="Nombre descriptivo del producto/servicio/gato")
     cantidad: int = Field(1, ge=1, description="Cantidad vendida")
     precio_unitario: float = Field(..., ge=0, description="Precio unitario")
     subtotal: Optional[float] = Field(None, ge=0, description="Subtotal de la línea")
@@ -361,6 +362,7 @@ class DetalleVentaOut(BaseModel):
     tipo_item: str
     producto_id: Optional[int] = None
     servicio_id: Optional[int] = None
+    gato_id: Optional[int] = None
     nombre_item: str
     cantidad: int
     precio_unitario: float

@@ -7,6 +7,7 @@ import {
   createService,
   createGato,
 } from '../services/api';
+import placeholderImage from '../assets/images/placeholder.svg';
 
 const CatalogItemModal = ({
   isOpen,
@@ -98,6 +99,8 @@ const CatalogItemModal = ({
 
     setLoading(true);
     try {
+      const finalImagen = imagen && imagen.trim() ? imagen.trim() : null;
+
       if (type === 'gato') {
         const payload = {
           nombre: nombre.trim(),
@@ -109,7 +112,7 @@ const CatalogItemModal = ({
           peso: peso === '' ? null : Number(peso),
           esterilizado: Boolean(esterilizado),
           vacunado: Boolean(vacunado),
-          imagen: imagen || undefined,
+          imagen: finalImagen,
           ...(isEditing ? { estado } : {}),
         };
 
@@ -127,11 +130,17 @@ const CatalogItemModal = ({
           return;
         }
 
+        if (type === 'producto' && numPrecio <= 0) {
+          setError('El precio del producto debe ser mayor a 0 COP.');
+          setLoading(false);
+          return;
+        }
+
         const payload = {
           nombre: nombre.trim(),
           descripcion: descripcion.trim(),
           precio: numPrecio,
-          imagen: imagen || undefined,
+          imagen: finalImagen,
           ...(isEditing ? { estado } : {}),
         };
 
@@ -341,7 +350,15 @@ const CatalogItemModal = ({
             </div>
             {imagen && (
               <div className="image-preview-box">
-                <img src={imagen} alt="Vista previa" className="modal-preview-img" />
+                <img
+                  src={imagen}
+                  alt="Vista previa"
+                  className="modal-preview-img"
+                  onError={(e) => {
+                    e.currentTarget.src = placeholderImage;
+                    e.currentTarget.onerror = null;
+                  }}
+                />
                 <button
                   type="button"
                   className="btn-remove-img"

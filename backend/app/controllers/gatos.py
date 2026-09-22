@@ -154,8 +154,21 @@ async def update_gato(
     if not gato:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Gato no encontrado")
 
-    for field, value in payload.model_dump(exclude_unset=True).items():
-        if value is not None:
+    dump = payload.model_dump(exclude_unset=True)
+    for field, value in dump.items():
+        if field == "nombre" and value:
+            gato.nombre = value.strip()
+        elif field == "imagen":
+            gato.imagen = value.strip() if (value and isinstance(value, str) and value.strip()) else None
+        elif field == "descripcion":
+            gato.descripcion = value.strip() if value else None
+        elif field == "raza":
+            gato.raza = value.strip() if value else None
+        elif field == "color":
+            gato.color = value.strip() if value else None
+        elif field == "peso":
+            gato.peso = value if value is not None else None
+        else:
             setattr(gato, field, value)
 
     db.commit()

@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage';
 import RecoverPasswordPage from './pages/RecoverPasswordPage';
 import DashboardPage from './pages/DashboardPage';
 import WhatsAppButton from './components/WhatsAppButton';
+import ChatbotWidget from './components/ChatbotWidget';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           </Routes>
         </main>
         <WhatsAppButton />
+        <ChatbotWidget />
         <Footer />
       </Router>
     </div>

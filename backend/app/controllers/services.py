@@ -137,8 +137,9 @@ async def update_service(
     servicio.nombre = payload.nombre.strip()
     servicio.descripcion = payload.descripcion.strip() if payload.descripcion else None
     servicio.precio = payload.precio
-    servicio.imagen = payload.imagen or None
     servicio.estado = payload.estado
+    if "imagen" in payload.model_fields_set:
+        servicio.imagen = payload.imagen.strip() if (payload.imagen and payload.imagen.strip()) else None
     db.commit()
     db.refresh(servicio)
 

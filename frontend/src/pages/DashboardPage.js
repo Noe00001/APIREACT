@@ -19,7 +19,12 @@ import {
 import AdminCatalogForm from '../components/AdminCatalogForm';
 import UserModal from '../components/UserModal';
 import CatalogItemModal from '../components/CatalogItemModal';
-import { Users, Coffee, Sparkles, PawPrint, SlidersHorizontal, X } from 'lucide-react';
+import AnalyticsTab from '../components/AnalyticsTab';
+import VentasTab from '../components/VentasTab';
+import FacturasTab from '../components/FacturasTab';
+import PQRTab from '../components/PQRTab';
+import { Users, Coffee, Sparkles, PawPrint, SlidersHorizontal, X, BarChart2, ShoppingCart, FileText, MessageSquare } from 'lucide-react';
+import placeholderImage from '../assets/images/placeholder.svg';
 
 const DashboardPage = () => {
   let user = null;
@@ -222,14 +227,24 @@ const DashboardPage = () => {
 
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {user.rol === 'Administrador' && (
-              <button
-                type="button"
-                className={`sidebar-link ${activeTab === 'usuarios' ? 'active' : ''}`}
-                onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
-                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'usuarios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'usuarios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-              >
-                <Users size={18} /> Usuarios ({users.length})
-              </button>
+              <>
+                <button
+                  type="button"
+                  className={`sidebar-link ${activeTab === 'analytics' ? 'active' : ''}`}
+                  onClick={() => { setActiveTab('analytics'); setSearchTerm(''); }}
+                  style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'analytics' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'analytics' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                >
+                  <BarChart2 size={18} /> Analítica
+                </button>
+                <button
+                  type="button"
+                  className={`sidebar-link ${activeTab === 'usuarios' ? 'active' : ''}`}
+                  onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
+                  style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'usuarios' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'usuarios' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                >
+                  <Users size={18} /> Usuarios ({users.length})
+                </button>
+              </>
             )}
             <button
               type="button"
@@ -265,6 +280,30 @@ const DashboardPage = () => {
                 <SlidersHorizontal size={18} /> Gestión Rápida
               </button>
             )}
+            <button
+              type="button"
+              className={`sidebar-link ${activeTab === 'ventas' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('ventas'); setSearchTerm(''); }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'ventas' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'ventas' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}
+            >
+              <ShoppingCart size={18} /> Adopciones y Servicios
+            </button>
+            <button
+              type="button"
+              className={`sidebar-link ${activeTab === 'facturas' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('facturas'); setSearchTerm(''); }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'facturas' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'facturas' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            >
+              <FileText size={18} /> Certificados y Comprobantes
+            </button>
+            <button
+              type="button"
+              className={`sidebar-link ${activeTab === 'pqr' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('pqr'); setSearchTerm(''); }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'pqr' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'pqr' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            >
+              <MessageSquare size={18} /> Atención (PQR)
+            </button>
           </nav>
         </aside>
 
@@ -344,6 +383,12 @@ const DashboardPage = () => {
             )}
           </div>
         )}
+
+        {/* NUEVOS TABS: ANALYTICS, VENTAS, FACTURAS, PQR */}
+        {activeTab === 'analytics' && <AnalyticsTab userRole={user.rol} />}
+        {activeTab === 'ventas' && <VentasTab userRole={user.rol} userId={user.id} />}
+        {activeTab === 'facturas' && <FacturasTab userRole={user.rol} />}
+        {activeTab === 'pqr' && <PQRTab userRole={user.rol} userId={user.id} />}
 
         {/* Tab: USUARIOS */}
         {activeTab === 'usuarios' && user.rol === 'Administrador' && (
@@ -472,7 +517,15 @@ const DashboardPage = () => {
                     <tr key={item.id}>
                       <td className="thumbnail-cell">
                         {item.imagen ? (
-                          <img src={item.imagen} alt={item.nombre} className="table-thumbnail" />
+                          <img
+                            src={item.imagen}
+                            alt={item.nombre}
+                            className="table-thumbnail"
+                            onError={(e) => {
+                              e.currentTarget.src = placeholderImage;
+                              e.currentTarget.onerror = null;
+                            }}
+                          />
                         ) : (
                           <span className="no-thumbnail"><Coffee size={20} /></span>
                         )}
@@ -559,7 +612,15 @@ const DashboardPage = () => {
                     <tr key={item.id}>
                       <td className="thumbnail-cell">
                         {item.imagen ? (
-                          <img src={item.imagen} alt={item.nombre} className="table-thumbnail" />
+                          <img
+                            src={item.imagen}
+                            alt={item.nombre}
+                            className="table-thumbnail"
+                            onError={(e) => {
+                              e.currentTarget.src = placeholderImage;
+                              e.currentTarget.onerror = null;
+                            }}
+                          />
                         ) : (
                           <span className="no-thumbnail"><Sparkles size={20} /></span>
                         )}
@@ -650,7 +711,15 @@ const DashboardPage = () => {
                     <tr key={item.id}>
                       <td className="thumbnail-cell">
                         {item.imagen ? (
-                          <img src={item.imagen} alt={item.nombre} className="table-thumbnail round" />
+                          <img
+                            src={item.imagen}
+                            alt={item.nombre}
+                            className="table-thumbnail round"
+                            onError={(e) => {
+                              e.currentTarget.src = placeholderImage;
+                              e.currentTarget.onerror = null;
+                            }}
+                          />
                         ) : (
                           <span className="no-thumbnail"><PawPrint size={20} /></span>
                         )}
