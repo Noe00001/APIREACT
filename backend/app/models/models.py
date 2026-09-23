@@ -63,6 +63,7 @@ class Producto(Base):
     precio = Column(DECIMAL(10, 2), nullable=False)
     imagen = Column(Text, nullable=True)
     estado = Column(Enum("Activo", "Inactivo"), nullable=False, default="Activo")
+    stock = Column(Integer, nullable=False, default=12)
     creado_por = Column(Integer, ForeignKey("usuarios.id"), nullable=False)
     creado_en = Column(TIMESTAMP, server_default=func.now())
 
@@ -79,6 +80,7 @@ class Servicio(Base):
     precio = Column(DECIMAL(10, 2), nullable=True)
     imagen = Column(Text, nullable=True)
     estado = Column(Enum("Activo", "Inactivo"), nullable=False, default="Activo")
+    stock = Column(Integer, nullable=False, default=12)
     creado_por = Column(Integer, ForeignKey("usuarios.id"), nullable=False)
     creado_en = Column(TIMESTAMP, server_default=func.now())
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createUser, updateUser } from '../services/api';
+import { createUser, updateUser } from '../../services/api';
 
 const initialUserState = {
   nombre: '',

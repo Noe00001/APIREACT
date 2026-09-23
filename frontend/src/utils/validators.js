@@ -14,6 +14,7 @@ export function validatePassword(value) {
   if (value.length > 50) return 'La contraseña es demasiado larga (máx 50)';
   if (!/[A-Z]/.test(value)) return 'Debe contener al menos una letra mayúscula';
   if (!/[0-9]/.test(value)) return 'Debe contener al menos un número';
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) return 'Debe contener al menos un símbolo especial';
   return '';
 }
 

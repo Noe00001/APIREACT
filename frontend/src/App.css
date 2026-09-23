@@ -1290,6 +1290,7 @@ code {
 }
 
 .stat-value {
+  display: block;
   font-size: 1.8rem;
   font-weight: 800;
   color: var(--cafe-900);
@@ -1301,6 +1302,7 @@ code {
 }
 
 .stat-label {
+  display: block;
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--muted-light);
@@ -2474,4 +2476,29 @@ code {
   border-color: rgba(49, 104, 39, 0.4);
 }
 
+/* Added for Product Hover Yellow effect */
+.catalog-card:hover h3 {
+  color: #ffc107 !important;
+  transition: color 0.3s ease;
+}
 
+.theme-dark .catalog-card:hover h3 {
+  color: #ffd54f !important;
+}
+
+/* Sidebar Hover & Active Fix */
+.sidebar-link:hover,
+.sidebar-link.active {
+  color: #d4ac0d !important;
+}
+.sidebar-link.active {
+  background: rgba(212, 172, 13, 0.1) !important; /* Optional: light yellow background for active state */
+}
+
+.theme-dark .sidebar-link:hover,
+.theme-dark .sidebar-link.active {
+  color: #ffd54f !important;
+}
+.theme-dark .sidebar-link.active {
+  background: rgba(255, 213, 79, 0.1) !important;
+}

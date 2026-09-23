@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getDashboardMetrics, downloadFile, getProducts, getServices, getUsers } from '../services/api';
+import { getDashboardMetrics, downloadFile, getProducts, getServices, getUsers } from '../../services/api';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell
@@ -205,41 +205,41 @@ const AnalyticsTab = ({ userRole }) => {
       {/* KPIS (CARDS) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
         {userRole === 'Administrador' && (
-          <div className="dashboard-stat-card" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ background: '#e1f5fe', padding: '1rem', borderRadius: '50%', color: '#0288d1' }}>
+          <div className="dashboard-stat-card" style={{ alignItems: 'center', textAlign: 'center', gap: '0.5rem' }}>
+            <div style={{ background: '#e1f5fe', padding: '1rem', borderRadius: '50%', color: '#0288d1', marginBottom: '0.5rem' }}>
               <Users size={24} />
             </div>
             <div>
-              <span className="stat-label">Usuarios</span>
               <span className="stat-value">{kpis.total_usuarios}</span>
+              <span className="stat-label">Usuarios</span>
             </div>
           </div>
         )}
-        <div className="dashboard-stat-card" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ background: '#e8f5e9', padding: '1rem', borderRadius: '50%', color: '#388e3c' }}>
+        <div className="dashboard-stat-card" style={{ alignItems: 'center', textAlign: 'center', gap: '0.5rem' }}>
+          <div style={{ background: '#e8f5e9', padding: '1rem', borderRadius: '50%', color: '#388e3c', marginBottom: '0.5rem' }}>
             <ShoppingCart size={24} />
           </div>
           <div>
-            <span className="stat-label">Operaciones Registradas</span>
             <span className="stat-value">{kpis.total_ventas}</span>
+            <span className="stat-label">Operaciones Registradas</span>
           </div>
         </div>
-        <div className="dashboard-stat-card" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ background: '#fff3e0', padding: '1rem', borderRadius: '50%', color: '#f57c00' }}>
+        <div className="dashboard-stat-card" style={{ alignItems: 'center', textAlign: 'center', gap: '0.5rem' }}>
+          <div style={{ background: '#fff3e0', padding: '1rem', borderRadius: '50%', color: '#f57c00', marginBottom: '0.5rem' }}>
             <TrendingUp size={24} />
           </div>
           <div>
-            <span className="stat-label">Ingresos Totales</span>
             <span className="stat-value">${Number(kpis.facturacion_total).toLocaleString('es-CO')}</span>
+            <span className="stat-label">Ingresos Totales</span>
           </div>
         </div>
-        <div className="dashboard-stat-card" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ background: '#ffebee', padding: '1rem', borderRadius: '50%', color: '#d32f2f' }}>
+        <div className="dashboard-stat-card" style={{ alignItems: 'center', textAlign: 'center', gap: '0.5rem' }}>
+          <div style={{ background: '#ffebee', padding: '1rem', borderRadius: '50%', color: '#d32f2f', marginBottom: '0.5rem' }}>
             <AlertCircle size={24} />
           </div>
           <div>
-            <span className="stat-label">PQR Pendientes</span>
             <span className="stat-value">{kpis.pqrs_pendientes} / {kpis.pqrs_recibidas}</span>
+            <span className="stat-label">PQR Pendientes</span>
           </div>
         </div>
       </div>

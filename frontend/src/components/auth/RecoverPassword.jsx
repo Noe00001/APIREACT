@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import Input from './ui/Input';
-import Button from './ui/Button';
-import { recoverPassword, resetPassword } from '../services/api';
-import validators from '../utils/validators';
+import Input from '../ui/Input';
+import Button from '../ui/Button';
+import { recoverPassword, resetPassword } from '../../services/api';
+import validators from '../../utils/validators';
 
 const RecoverPassword = ({ onSent, defaultEmail }) => {
   const [email, setEmail] = useState(defaultEmail || '');

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getGatos } from '../services/api';
+import { getGatos } from '../../services/api';
 import { PawPrint, Check, Heart } from 'lucide-react';
-import placeholderImage from '../assets/images/placeholder.svg';
+import placeholderImage from '../../assets/images/placeholder.svg';
 
 const CatAdoptionSection = () => {
   const [gatos, setGatos] = useState([]);

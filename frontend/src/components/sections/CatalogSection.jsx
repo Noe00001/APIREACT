@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getProducts, getServices, getGatos } from '../services/api';
+import { getProducts, getServices, getGatos } from '../../services/api';
 import { LayoutGrid, Coffee, Sparkles, PawPrint, Check, Heart } from 'lucide-react';
-import placeholderImage from '../assets/images/placeholder.svg';
+import placeholderImage from '../../assets/images/placeholder.svg';
 
 const CatalogSection = () => {
   const [products, setProducts] = useState([]);
@@ -27,9 +27,19 @@ const CatalogSection = () => {
         .finally(() => setLoading(false));
     };
 
+    const handleStorageChange = (e) => {
+      if (e.key === 'last_catalog_update') {
+        loadCatalog();
+      }
+    };
+
     loadCatalog();
     window.addEventListener('catalog-updated', loadCatalog);
-    return () => window.removeEventListener('catalog-updated', loadCatalog);
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('catalog-updated', loadCatalog);
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const handleImageError = (event) => {
@@ -37,10 +47,9 @@ const CatalogSection = () => {
     event.currentTarget.onerror = null;
   };
 
-  // Limitamos estrictamente a un máximo de 10 por categoría según requerimiento
-  const displayedProducts = products.slice(0, 10);
-  const displayedServices = services.slice(0, 10);
-  const displayedGatos = gatos.slice(0, 10);
+  const displayedProducts = products;
+  const displayedServices = services;
+  const displayedGatos = gatos;
 
   return (
     <div id="menu" className="catalog-wrapper">
@@ -96,7 +105,7 @@ const CatalogSection = () => {
             <div className="category-title-wrap">
               <span className="category-badge-chip product-chip">Categoría 1 • Gastronomía</span>
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Coffee size={22} /> Carta de Productos</h3>
-              <p>Cafés de origen, métodos de filtrado y repostería artesanal horneada a diario (Máx. 10).</p>
+              <p>Cafés de origen, métodos de filtrado y repostería artesanal horneada a diario.</p>
             </div>
             <span className="category-counter">{displayedProducts.length} disponibles</span>
           </div>
@@ -145,7 +154,7 @@ const CatalogSection = () => {
             <div className="category-title-wrap">
               <span className="category-badge-chip service-chip">Categoría 2 • Experiencias</span>
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Sparkles size={22} /> Servicios & Cat Café</h3>
-              <p>Gatoterapia, reservas VIP, talleres de barismo y coworking relajante (Máx. 10).</p>
+              <p>Gatoterapia, reservas VIP, talleres de barismo y coworking relajante.</p>
             </div>
             <span className="category-counter">{displayedServices.length} disponibles</span>
           </div>
@@ -196,7 +205,7 @@ const CatalogSection = () => {
             <div className="category-title-wrap">
               <span className="category-badge-chip cat-chip" style={{ backgroundColor: '#fce7f3', color: '#be185d' }}>Categoría 3 • Adopciones</span>
               <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><PawPrint size={22} /> Gatos en Adopción</h3>
-              <p>Conoce a nuestros {displayedGatos.length} michis rescatados que esperan una familia responsable (Máx. 10).</p>
+              <p>Conoce a nuestros {displayedGatos.length} michis rescatados que esperan una familia responsable.</p>
             </div>
             <span className="category-counter">{displayedGatos.length} disponibles</span>
           </div>

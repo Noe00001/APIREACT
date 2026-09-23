@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import gato1 from '../assets/images/gato1.png';
-import gato2 from '../assets/images/gato2.png';
-import gato3 from '../assets/images/gato3.png';
-import gato4 from '../assets/images/gato4.png';
-import gato5 from '../assets/images/gato5.png';
-import gato6 from '../assets/images/gato6.png';
-import gato7 from '../assets/images/gato7.png';
-import gato8 from '../assets/images/gato8.png';
-import gato9 from '../assets/images/gato9.png';
-import gato10 from '../assets/images/gato10.png';
-import placeholderImage from '../assets/images/placeholder.svg';
+import gato1 from '../../assets/images/gato1.png';
+import gato2 from '../../assets/images/gato2.png';
+import gato3 from '../../assets/images/gato3.png';
+import gato4 from '../../assets/images/gato4.png';
+import gato5 from '../../assets/images/gato5.png';
+import gato6 from '../../assets/images/gato6.png';
+import gato7 from '../../assets/images/gato7.png';
+import gato8 from '../../assets/images/gato8.png';
+import gato9 from '../../assets/images/gato9.png';
+import gato10 from '../../assets/images/gato10.png';
+import placeholderImage from '../../assets/images/placeholder.svg';
 
 const slides = [
   {

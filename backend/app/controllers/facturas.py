@@ -173,8 +173,8 @@ def descargar_factura_pdf(
 
     info_data = [
         [
-            Paragraph(f"<b>FACTURA COMERCIAL:</b> {factura.numero_factura}<br/>"
-                      f"<b>Venta Asociada:</b> {factura.venta.numero_venta if factura.venta else 'N/A'}<br/>"
+            Paragraph(f"<b>COMPROBANTE / CERTIFICADO:</b> {factura.numero_factura}<br/>"
+                      f"<b>Operación Asociada:</b> {factura.venta.numero_venta if factura.venta else 'N/A'}<br/>"
                       f"<b>Fecha de Emisión:</b> {fecha_str}<br/>"
                       f"<b>Estado:</b> <font color='#16a34a'><b>{factura.estado}</b></font>", header_box),
             Paragraph(f"<b>DATOS DEL CLIENTE:</b><br/>"

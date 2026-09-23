@@ -1,16 +1,16 @@
 import React from 'react';
-import imgParty from '../assets/images/cat_party_coffee_1790024627149.jpg';
-import imgAdopted from '../assets/images/cat_adopted_coffee_1790024639541.jpg';
-import imgWinter from '../assets/images/cat_winter_coffee_1790024648498.jpg';
-import imgTasting from '../assets/images/cat_tasting_coffee_1790024658478.jpg';
-import imgPlayful from '../assets/images/cat_playful_coffee_1790024668329.jpg';
-import imgAutumn from '../assets/images/cat_autumn_coffee_1790024698073.jpg';
-import imgHappy from '../assets/images/cat_happy_coffee_1790024706574.jpg';
-import imgPastry from '../assets/images/cat_pastry_coffee_1790024715776.jpg';
-import imgCoworking from '../assets/images/cat_coworking_coffee_1790024725061.jpg';
-import imgBirthday from '../assets/images/cat_birthday_coffee_1790024734114.jpg';
+import imgParty from '../../assets/images/cat_party_coffee_1790024627149.jpg';
+import imgAdopted from '../../assets/images/cat_adopted_coffee_1790024639541.jpg';
+import imgWinter from '../../assets/images/cat_winter_coffee_1790024648498.jpg';
+import imgTasting from '../../assets/images/cat_tasting_coffee_1790024658478.jpg';
+import imgPlayful from '../../assets/images/cat_playful_coffee_1790024668329.jpg';
+import imgAutumn from '../../assets/images/cat_autumn_coffee_1790024698073.jpg';
+import imgHappy from '../../assets/images/cat_happy_coffee_1790024706574.jpg';
+import imgPastry from '../../assets/images/cat_pastry_coffee_1790024715776.jpg';
+import imgCoworking from '../../assets/images/cat_coworking_coffee_1790024725061.jpg';
+import imgBirthday from '../../assets/images/cat_birthday_coffee_1790024734114.jpg';
 
-import placeholderImage from '../assets/images/placeholder.svg';
+import placeholderImage from '../../assets/images/placeholder.svg';
 
 const galleryItems = [
   {

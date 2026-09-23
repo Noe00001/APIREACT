@@ -26,14 +26,18 @@ from app.auth import get_current_user, require_role
 router = APIRouter(prefix="/api/reportes", tags=["Reportes"])
 
 
+from datetime import datetime, date, timedelta
+
 def _obtener_ventas_dia(fecha_str: str, db: Session):
     try:
         fecha_obj = datetime.strptime(fecha_str, "%Y-%m-%d").date()
     except ValueError:
         raise HTTPException(status_code=400, detail="Formato de fecha inválido. Debe ser YYYY-MM-DD")
 
-    f_ini = datetime.combine(fecha_obj, datetime.min.time())
-    f_fin = datetime.combine(fecha_obj, datetime.max.time())
+    # Ajuste de zona horaria: la BD (SQLite) almacena en UTC por func.now()
+    # Asumiendo UTC-5 (Colombia) para el reporte local
+    f_ini = datetime.combine(fecha_obj, datetime.min.time()) + timedelta(hours=5)
+    f_fin = datetime.combine(fecha_obj, datetime.max.time()) + timedelta(hours=5)
 
     ventas = db.query(Venta).filter(
         Venta.fecha_hora >= f_ini,
@@ -132,7 +136,7 @@ def exportar_reporte_diario_excel(
     # Encabezado del reporte
     ws.merge_cells("A1:K1")
     title_cell = ws["A1"]
-    title_cell.value = "CAFÉ SALOMÉ — REPORTE DIARIO DE VENTAS"
+    title_cell.value = "CAFÉ SALOMÉ — REPORTE DIARIO DE ADOPCIONES Y VENTAS"
     title_cell.font = title_font
     title_cell.fill = title_fill
     title_cell.alignment = Alignment(horizontal="center", vertical="center")
@@ -282,7 +286,7 @@ def exportar_reporte_diario_pdf(
     elements = []
 
     # Encabezado
-    elements.append(Paragraph("<b>CAFÉ SALOMÉ — REPORTE DIARIO DE VENTAS</b>", title_style))
+    elements.append(Paragraph("<b>CAFÉ SALOMÉ — REPORTE DIARIO DE ADOPCIONES Y VENTAS</b>", title_style))
     elements.append(Paragraph(
         f"Fecha Operativa: <b>{fecha_consulta}</b> | Generado por: {current_user.nombre} {current_user.apellido} ({current_user.rol.nombre}) | Sistema: Café Cato API FullStack",
         meta_style

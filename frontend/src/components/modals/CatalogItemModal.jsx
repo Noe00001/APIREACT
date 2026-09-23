@@ -6,8 +6,8 @@ import {
   createProduct,
   createService,
   createGato,
-} from '../services/api';
-import placeholderImage from '../assets/images/placeholder.svg';
+} from '../../services/api';
+import placeholderImage from '../../assets/images/placeholder.svg';
 
 const CatalogItemModal = ({
   isOpen,

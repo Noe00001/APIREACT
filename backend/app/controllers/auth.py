@@ -11,7 +11,7 @@ from jose import jwt, JWTError
 
 from app.database import get_db
 from app.models.models import Usuario
-from app.views.schemas import LoginRequest, TokenResponse, RecoverPasswordRequest, ResetPasswordRequest
+from app.views.schemas import LoginRequest, TokenResponse, RecoverPasswordRequest, ResetPasswordRequest, CheckEmailRequest
 from app.auth import verify_password, create_access_token, hash_password, SECRET_KEY, ALGORITHM, get_current_user
 
 router = APIRouter(prefix="/api/auth", tags=["Autenticación"])
@@ -31,6 +31,24 @@ def _user_to_dict(user: Usuario) -> dict:
         "direccion": user.direccion,
         "telefono": user.telefono,
     }
+
+
+@router.post(
+    "/check-email",
+    status_code=status.HTTP_200_OK,
+    summary="Verificar si el correo existe",
+    description="Permite validar si el correo existe para continuar con el ingreso de la contraseña.",
+)
+async def check_email(payload: CheckEmailRequest, db: Session = Depends(get_db)):
+    email = payload.email.strip().lower()
+    user = db.query(Usuario).filter(Usuario.email == email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="El correo ingresado no está registrado en el sistema."
+        )
+    return {"message": "Correo válido", "exists": True}
 
 
 @router.post(

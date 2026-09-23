@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import validators from '../utils/validators';
-import Input from './ui/Input';
-import Button from './ui/Button';
-import { registerUser } from '../services/api';
+import validators from '../../utils/validators';
+import Input from '../ui/Input';
+import Button from '../ui/Button';
+import { registerUser } from '../../services/api';
 
 const RegisterModal = ({ isOpen, onClose, onRegistered }) => {
   const [step, setStep] = useState(1);

@@ -62,6 +62,9 @@ async function request(path, options = {}) {
 export const registerUser = (payload) =>
   request('/usuarios/registro', { method: 'POST', body: JSON.stringify(payload) });
 
+export const checkEmail = (payload) =>
+  request('/auth/check-email', { method: 'POST', body: JSON.stringify(payload) });
+
 export const loginUser = (payload) =>
   request('/auth/login', { method: 'POST', body: JSON.stringify(payload) });
 
@@ -252,7 +255,7 @@ export const getDashboardMetrics = (filters = {}) => {
 
 // ─── 12. Chatbot ─────────────────────────────────────────────────────────────────
 export const startChatSession = () =>
-  request('/chatbot/iniciar', { method: 'POST' });
+  Promise.resolve({ session_id: null });
 
 export const sendChatMessage = (payload) =>
-  request('/chatbot/chat', { method: 'POST', body: JSON.stringify(payload) });
+  request('/chatbot/message', { method: 'POST', body: JSON.stringify(payload) });

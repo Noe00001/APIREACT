@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPqrs, createPqr, updatePqrStatus } from '../services/api';
+import { getPqrs, createPqr, updatePqrStatus } from '../../services/api';
 import { MessageSquare, Plus, X, Search, CheckCircle } from 'lucide-react';
 
 const PQRTab = ({ userRole, userId }) => {
@@ -84,7 +84,7 @@ const PQRTab = ({ userRole, userId }) => {
           <h3>Atención al Cliente (PQR)</h3>
           <span className="table-subtitle">Peticiones, Quejas, Reclamos y Sugerencias</span>
         </div>
-        {userRole === 'Cliente' && (
+        {(userRole === 'Cliente' || userRole === 'Empleado') && (
           <button type="button" className="btn-action-primary" onClick={() => setShowModal(true)}>
             <Plus size={16} style={{ marginRight: '5px' }} /> Radicar PQR
           </button>

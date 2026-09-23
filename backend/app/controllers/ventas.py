@@ -108,8 +108,27 @@ def registrar_venta(
         if item.tipo_item == "Gato" and item.gato_id:
             from app.models.models import Gato
             gato_db = db.query(Gato).filter(Gato.id == item.gato_id).first()
-            if gato_db:
-                gato_db.estado = "Inactivo"  # Marcar como Adoptado
+            if not gato_db or gato_db.estado != "Activo":
+                raise HTTPException(status_code=400, detail=f"El gato '{item.nombre_item}' ya no está disponible para adopción.")
+            gato_db.estado = "Inactivo"  # Marcar como Adoptado
+            
+        if item.tipo_item == "Producto" and item.producto_id:
+            from app.models.models import Producto
+            prod_db = db.query(Producto).filter(Producto.id == item.producto_id).first()
+            if not prod_db:
+                raise HTTPException(status_code=404, detail=f"Producto '{item.nombre_item}' no encontrado.")
+            if prod_db.stock < item.cantidad:
+                raise HTTPException(status_code=400, detail=f"Stock insuficiente para el producto '{item.nombre_item}'. Disponible: {prod_db.stock}")
+            prod_db.stock -= item.cantidad
+            
+        if item.tipo_item == "Servicio" and item.servicio_id:
+            from app.models.models import Servicio
+            serv_db = db.query(Servicio).filter(Servicio.id == item.servicio_id).first()
+            if not serv_db:
+                raise HTTPException(status_code=404, detail=f"Servicio '{item.nombre_item}' no encontrado.")
+            if serv_db.stock < item.cantidad:
+                raise HTTPException(status_code=400, detail=f"Cupos insuficientes para el servicio '{item.nombre_item}'. Disponible: {serv_db.stock}")
+            serv_db.stock -= item.cantidad
 
         detalles_factura_para_guardar.append({
             "descripcion": f"{item.nombre_item} x {item.cantidad}",

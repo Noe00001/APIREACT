@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getVentas, createVenta, getGatos, getServices, getProducts, getUsers, updateVentaStatus } from '../services/api';
+import { getVentas, createVenta, getGatos, getServices, getProducts, getUsers, updateVentaStatus } from '../../services/api';
 import { FileText, Plus, X, Search, Check, AlertCircle } from 'lucide-react';
 
 const VentasTab = ({ userRole, userId }) => {
@@ -60,6 +60,18 @@ const VentasTab = ({ userRole, userId }) => {
 
   const addToCart = (item) => {
     const existing = cart.find(c => c.id === item.id && c.tipo_item === item.tipo_item);
+    
+    if (item.tipo_item === 'Gato') {
+      if (existing) return alert('No puedes adoptar el mismo gato más de una vez.');
+      setCart([...cart, { ...item, cantidad: 1, subtotal: Number(item.precio) }]);
+      return;
+    }
+
+    const currentQty = existing ? existing.cantidad : 0;
+    if (currentQty + 1 > item.stock) {
+      return alert(`Stock insuficiente. Solo hay ${item.stock} unidades disponibles.`);
+    }
+
     if (existing) {
       setCart(cart.map(c => 
         (c.id === item.id && c.tipo_item === item.tipo_item) 
@@ -232,6 +244,9 @@ const VentasTab = ({ userRole, userId }) => {
                         <strong>{item.nombre}</strong>
                         <div style={{ fontSize: '0.85rem', color: 'var(--text-light)', marginTop: '4px' }}>
                           <span style={{ fontWeight: 'bold', color: 'var(--brand-color)' }}>{item.tipo_item}</span> • ${Number(item.precio).toLocaleString('es-CO')}
+                          <span style={{ marginLeft: '10px', backgroundColor: '#e9ecef', padding: '2px 6px', borderRadius: '4px', fontSize: '0.8rem' }}>
+                            Stock: {item.tipo_item === 'Gato' ? 1 : item.stock}
+                          </span>
                         </div>
                       </div>
                       <div style={{

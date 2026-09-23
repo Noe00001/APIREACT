@@ -25,6 +25,7 @@ def _serialize(p: Producto) -> dict:
         "nombre": p.nombre,
         "descripcion": p.descripcion,
         "precio": float(p.precio) if p.precio is not None else 0.0,
+        "stock": p.stock,
         "imagen": p.imagen,
         "estado": p.estado,
         "creado_en": p.creado_en.isoformat() if p.creado_en else None,
@@ -103,6 +104,7 @@ async def create_product(
         nombre=payload.nombre.strip(),
         descripcion=payload.descripcion.strip() if payload.descripcion else None,
         precio=payload.precio,
+        stock=payload.stock,
         imagen=payload.imagen or None,
         estado="Activo",
         creado_por=current_admin.id,
@@ -142,6 +144,8 @@ async def update_product(
     producto.nombre = payload.nombre.strip()
     producto.descripcion = payload.descripcion.strip() if payload.descripcion else None
     producto.precio = payload.precio
+    if payload.stock is not None:
+        producto.stock = payload.stock
     producto.estado = payload.estado
     if "imagen" in payload.model_fields_set:
         producto.imagen = payload.imagen.strip() if (payload.imagen and payload.imagen.strip()) else None
@@ -174,16 +178,20 @@ async def delete_product(
     if not producto:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Producto no encontrado")
 
-    producto.estado = "Inactivo"
+    # Desvincular de ventas antes de eliminar para evitar error de integridad
+    from app.models.models import DetalleVenta
+    db.query(DetalleVenta).filter(DetalleVenta.producto_id == product_id).update({"producto_id": None})
+    
+    db.delete(producto)
     db.commit()
 
     background_tasks.add_task(
         log_auditoria_task,
-        "DESACTIVAR_PRODUCTO",
+        "ELIMINAR_PRODUCTO",
         "productos",
-        producto.id,
+        product_id,
         current_admin.email,
-        "Estado cambiado a Inactivo",
+        "Producto eliminado permanentemente de la base de datos",
     )
     return {"message": "Producto eliminado exitosamente"}
 

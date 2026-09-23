@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getAiRecommendation } from '../services/api';
+import { getAiRecommendation } from '../../services/api';
 import { Bot, Coffee, Zap, Smile, Cookie, PawPrint, Sparkles, AlertTriangle, Cpu, UtensilsCrossed } from 'lucide-react';
 
 const AiCoffeeRecommender = () => {

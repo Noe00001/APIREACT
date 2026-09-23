@@ -12,6 +12,9 @@ from pydantic import BaseModel, EmailStr, Field, field_validator, model_validato
 # 1. Esquemas de Autenticación
 # ─────────────────────────────────────────────
 
+class CheckEmailRequest(BaseModel):
+    email: EmailStr = Field(..., description="Correo electrónico del usuario para verificar")
+
 class LoginRequest(BaseModel):
     email: EmailStr = Field(..., description="Correo electrónico del usuario", examples=["admin@cafecato.com"])
     password: str = Field(..., min_length=6, description="Contraseña del usuario", examples=["Admin123*"])
@@ -161,6 +164,7 @@ class ProductoCreate(BaseModel):
     nombre: str = Field(..., min_length=3, max_length=100, description="Nombre del producto o café", examples=["Espresso Especial"])
     descripcion: Optional[str] = Field(None, max_length=255, description="Descripción organoléptica", examples=["Notas frutales y chocolate amargo"])
     precio: float = Field(..., gt=0, description="Precio unitario en pesos COP", examples=[6500.0])
+    stock: int = Field(12, ge=0, description="Cantidad disponible en inventario")
     imagen: Optional[str] = Field(None, description="URL o base64 de la imagen")
 
     @field_validator("nombre")
@@ -176,6 +180,7 @@ class ProductoUpdate(BaseModel):
     nombre: str = Field(..., min_length=3, max_length=100)
     descripcion: Optional[str] = Field(None, max_length=255)
     precio: float = Field(..., gt=0)
+    stock: Optional[int] = Field(None, ge=0)
     imagen: Optional[str] = None
     estado: str = Field("Activo", description="Activo o Inactivo")
 
@@ -192,6 +197,7 @@ class ProductoOut(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
     precio: float
+    stock: int
     imagen: Optional[str] = None
     estado: str
     creado_en: Optional[datetime] = None
@@ -207,6 +213,7 @@ class ServicioCreate(BaseModel):
     nombre: str = Field(..., min_length=3, max_length=100, examples=["Sesión de Cat Café"])
     descripcion: Optional[str] = Field(None, max_length=255)
     precio: Optional[float] = Field(None, ge=0, description="Precio del servicio (opcional/gratuito si es 0)")
+    stock: int = Field(12, ge=0, description="Capacidad o cupos disponibles")
     imagen: Optional[str] = None
 
     @field_validator("nombre")
@@ -222,6 +229,7 @@ class ServicioUpdate(BaseModel):
     nombre: str = Field(..., min_length=3, max_length=100)
     descripcion: Optional[str] = Field(None, max_length=255)
     precio: Optional[float] = Field(None, ge=0)
+    stock: Optional[int] = Field(None, ge=0)
     imagen: Optional[str] = None
     estado: str = Field("Activo")
 
@@ -231,6 +239,7 @@ class ServicioOut(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
     precio: Optional[float] = None
+    stock: int
     imagen: Optional[str] = None
     estado: str
 

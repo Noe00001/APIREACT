@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { createGato, createProduct, createService } from '../services/api';
-import placeholderImage from '../assets/images/placeholder.svg';
+import { createGato, createProduct, createService } from '../../services/api';
+import placeholderImage from '../../assets/images/placeholder.svg';
 
 const initialForm = {
-  nombre: '', descripcion: '', precio: '', imagen: '', edad: 1, raza: '', sexo: 'Macho', color: '', peso: '', esterilizado: false, vacunado: false,
+  nombre: '', descripcion: '', precio: '', stock: 12, imagen: '', edad: 1, raza: '', sexo: 'Macho', color: '', peso: '', esterilizado: false, vacunado: false,
 };
 
 const AdminCatalogForm = ({ onSaved }) => {
@@ -91,6 +91,7 @@ const AdminCatalogForm = ({ onSaved }) => {
         nombre: form.nombre.trim(),
         descripcion: form.descripcion.trim(),
         precio: numPrecio,
+        stock: Number(form.stock),
         imagen: finalImagen
       });
       setForm(initialForm);
@@ -127,7 +128,10 @@ const AdminCatalogForm = ({ onSaved }) => {
             <label><input type="checkbox" name="vacunado" checked={form.vacunado} onChange={(event) => setForm((current) => ({ ...current, vacunado: event.target.checked }))} /> Vacunado</label>
           </>
         ) : (
-          <label>Precio<input name="precio" type="number" min="0" step="0.01" value={form.precio} onChange={handleChange} required /></label>
+          <>
+            <label>Precio<input name="precio" type="number" min="0" step="0.01" value={form.precio} onChange={handleChange} required /></label>
+            <label>Stock<input name="stock" type="number" min="0" value={form.stock} onChange={handleChange} required /></label>
+          </>
         )}
         <div className="catalog-image-field-wrap">
           <label>URL de la imagen (opcional)

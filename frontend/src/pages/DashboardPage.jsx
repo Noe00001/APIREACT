@@ -16,14 +16,14 @@ import {
   updateServiceStatus,
   updateUserStatus,
 } from '../services/api';
-import AdminCatalogForm from '../components/AdminCatalogForm';
-import UserModal from '../components/UserModal';
-import CatalogItemModal from '../components/CatalogItemModal';
-import AnalyticsTab from '../components/AnalyticsTab';
-import VentasTab from '../components/VentasTab';
-import FacturasTab from '../components/FacturasTab';
-import PQRTab from '../components/PQRTab';
-import { Users, Coffee, Sparkles, PawPrint, SlidersHorizontal, X, BarChart2, ShoppingCart, FileText, MessageSquare } from 'lucide-react';
+import AdminCatalogForm from '../components/admin/AdminCatalogForm';
+import UserModal from '../components/modals/UserModal';
+import CatalogItemModal from '../components/modals/CatalogItemModal';
+import AnalyticsTab from '../components/tabs/AnalyticsTab';
+import VentasTab from '../components/tabs/VentasTab';
+import FacturasTab from '../components/tabs/FacturasTab';
+import PQRTab from '../components/tabs/PQRTab';
+import { Users, Coffee, Sparkles, PawPrint, SlidersHorizontal, X, BarChart2, ShoppingCart, FileText, MessageSquare, Home } from 'lucide-react';
 import placeholderImage from '../assets/images/placeholder.svg';
 
 const DashboardPage = () => {
@@ -78,7 +78,13 @@ const DashboardPage = () => {
       }
 
       await Promise.all(requests);
+      
+      // Update local catalog
       window.dispatchEvent(new Event('catalog-updated'));
+      
+      // Trigger cross-tab update (for when admin panel and home are in different tabs)
+      localStorage.setItem('last_catalog_update', Date.now().toString());
+      
       setMessage('');
     } catch (error) {
       setMessage(error.message || 'Error al actualizar datos');
@@ -304,6 +310,15 @@ const DashboardPage = () => {
             >
               <MessageSquare size={18} /> Atención (PQR)
             </button>
+            <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
+              <a
+                href="/"
+                className="sidebar-link"
+                style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: 'transparent', color: 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
+              >
+                <Home size={18} /> Volver al Inicio
+              </a>
+            </div>
           </nav>
         </aside>
 

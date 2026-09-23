@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import App from './App';
+import App from './App.jsx';
 
 test('renders the home page with the coffee gallery', async () => {
   render(<App />);

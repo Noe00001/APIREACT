@@ -25,6 +25,7 @@ def _serialize(s: Servicio) -> dict:
         "nombre": s.nombre,
         "descripcion": s.descripcion,
         "precio": float(s.precio) if s.precio is not None else None,
+        "stock": s.stock,
         "imagen": s.imagen,
         "estado": s.estado,
     }
@@ -98,6 +99,7 @@ async def create_service(
         nombre=payload.nombre.strip(),
         descripcion=payload.descripcion.strip() if payload.descripcion else None,
         precio=payload.precio,
+        stock=payload.stock,
         imagen=payload.imagen or None,
         estado="Activo",
         creado_por=current_admin.id,
@@ -137,6 +139,8 @@ async def update_service(
     servicio.nombre = payload.nombre.strip()
     servicio.descripcion = payload.descripcion.strip() if payload.descripcion else None
     servicio.precio = payload.precio
+    if payload.stock is not None:
+        servicio.stock = payload.stock
     servicio.estado = payload.estado
     if "imagen" in payload.model_fields_set:
         servicio.imagen = payload.imagen.strip() if (payload.imagen and payload.imagen.strip()) else None
@@ -169,16 +173,20 @@ async def delete_service(
     if not servicio:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Servicio no encontrado")
 
-    servicio.estado = "Inactivo"
+    # Desvincular de ventas antes de eliminar para evitar error de integridad
+    from app.models.models import DetalleVenta
+    db.query(DetalleVenta).filter(DetalleVenta.servicio_id == service_id).update({"servicio_id": None})
+    
+    db.delete(servicio)
     db.commit()
 
     background_tasks.add_task(
         log_auditoria_task,
-        "DESACTIVAR_SERVICIO",
+        "ELIMINAR_SERVICIO",
         "servicios",
-        servicio.id,
+        service_id,
         current_admin.email,
-        "Estado cambiado a Inactivo",
+        "Servicio eliminado permanentemente de la base de datos",
     )
     return {"message": "Servicio eliminado exitosamente"}
 

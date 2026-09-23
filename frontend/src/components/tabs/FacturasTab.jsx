@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getFacturas, downloadFile } from '../services/api';
+import { getFacturas, downloadFile } from '../../services/api';
 import { Download, FileText, Search } from 'lucide-react';
 
 const FacturasTab = ({ userRole }) => {

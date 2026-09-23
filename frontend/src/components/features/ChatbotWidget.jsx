@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
-import { startChatSession, sendChatMessage } from '../services/api';
+import { X, Send, User } from 'lucide-react';
+import chatbotIcon from '../../assets/chatbot-icon.png';
+import { startChatSession, sendChatMessage } from '../../services/api';
 
 const ChatbotWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,8 +52,8 @@ const ChatbotWidget = () => {
     
     setIsLoading(true);
     try {
-      const response = await sendChatMessage({ mensaje: userMsg });
-      setMessages(prev => [...prev, { remitente: 'asistente', contenido: response.respuesta }]);
+      const response = await sendChatMessage({ message: userMsg });
+      setMessages(prev => [...prev, { remitente: 'asistente', contenido: response.reply }]);
     } catch (error) {
       setMessages(prev => [...prev, { remitente: 'asistente', contenido: 'Lo siento, tuve un problema procesando tu mensaje. ¿Puedes intentarlo de nuevo?' }]);
     } finally {
@@ -87,7 +88,7 @@ const ChatbotWidget = () => {
           onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
           onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >
-          <MessageCircle size={30} />
+          <img src={chatbotIcon} alt="Chatbot" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
         </button>
       )}
 
@@ -117,7 +118,7 @@ const ChatbotWidget = () => {
             alignItems: 'center'
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Bot size={24} />
+              <img src={chatbotIcon} alt="Bot" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <strong style={{ fontSize: '1.1rem' }}>Asistente Salomé</strong>
                 <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>IA de Soporte</span>
@@ -149,11 +150,7 @@ const ChatbotWidget = () => {
                 maxWidth: '85%'
               }}>
                 {msg.remitente === 'asistente' && (
-                  <div style={{ 
-                    backgroundColor: 'var(--brand-color)', color: '#fff', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 
-                  }}>
-                    <Bot size={16} />
-                  </div>
+                  <img src={chatbotIcon} alt="Bot" style={{ width: '28px', height: '28px', borderRadius: '50%', flexShrink: 0, objectFit: 'cover', border: '2px solid var(--brand-color)' }} />
                 )}
                 <div style={{
                   backgroundColor: msg.remitente === 'usuario' ? '#d39c6b' : '#fff',
@@ -173,9 +170,7 @@ const ChatbotWidget = () => {
             
             {isLoading && (
               <div style={{ display: 'flex', gap: '0.5rem', alignSelf: 'flex-start' }}>
-                <div style={{ backgroundColor: 'var(--brand-color)', color: '#fff', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <Bot size={16} />
-                </div>
+                <img src={chatbotIcon} alt="Bot" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--brand-color)' }} />
                 <div style={{ backgroundColor: '#fff', padding: '0.75rem 1rem', borderRadius: '12px', borderBottomLeftRadius: 0, color: '#999', fontSize: '0.9rem' }}>
                   Escribiendo...
                 </div>

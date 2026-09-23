@@ -1,4 +1,4 @@
-import RecoverPassword from '../components/RecoverPassword';
+import RecoverPassword from '../components/auth/RecoverPassword';
 import { useNavigate } from 'react-router-dom';
 
 const RecoverPasswordPage = () => {
