@@ -497,6 +497,8 @@ class DashboardKPIsOut(BaseModel):
     ventas_hoy: float
     pqrs_recibidas: int
     pqrs_pendientes: int
+    reservas_recibidas: int
+    reservas_pendientes: int
 
 
 class ChartItem(BaseModel):
@@ -510,3 +512,33 @@ class DashboardAnalyticsOut(BaseModel):
     ventas_por_dia: List[ChartItem]
     ventas_por_categoria: List[ChartItem]
     top_mas_vendidos: List[ChartItem]
+
+
+# --- MÓDULO DE RESERVAS Y CONTACTO ---
+class ReservaContactoCreate(BaseModel):
+    nombre: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr
+    telefono: Optional[str] = Field(None, max_length=50)
+    motivo: str = Field("reserva")
+    personas: Optional[str] = Field("2", max_length=20)
+    fecha_tentativa: Optional[str] = Field(None, max_length=50)
+    mensaje: Optional[str] = None
+
+class ReservaContactoUpdateStatus(BaseModel):
+    estado: str = Field(..., description="Pendiente, Contactado, Confirmada, Cancelada")
+    respuesta: Optional[str] = Field(None, description="Respuesta o nota del administrador")
+
+class ReservaContactoOut(BaseModel):
+    id: int
+    nombre: str
+    email: str
+    telefono: Optional[str] = None
+    motivo: str
+    personas: Optional[str] = None
+    fecha_tentativa: Optional[str] = None
+    mensaje: Optional[str] = None
+    estado: str
+    respuesta: Optional[str] = None
+    creado_en: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)

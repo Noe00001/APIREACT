@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
 
 from app.database import get_db
-from app.models.models import Usuario, Producto, Servicio, Venta, DetalleVenta, Factura, PQR
+from app.models.models import Usuario, Producto, Servicio, Venta, DetalleVenta, Factura, PQR, ReservaContacto
 from app.views.schemas import DashboardAnalyticsOut, DashboardKPIsOut, ChartItem
 from app.auth import get_current_user
 
@@ -95,6 +95,13 @@ def obtener_metricas_dashboard(
     pqrs_recibidas = pqr_q.count()
     pqrs_pendientes = pqr_q.filter(PQR.estado.in_(["Pendiente", "En Proceso"])).count()
 
+    # Métricas de Reservas
+    res_q = db.query(ReservaContacto)
+    if rol == "Cliente":
+        res_q = res_q.filter(ReservaContacto.email == current_user.email)
+    reservas_recibidas = res_q.count()
+    reservas_pendientes = res_q.filter(ReservaContacto.estado == "Pendiente").count()
+
     kpis = DashboardKPIsOut(
         total_usuarios=total_usuarios,
         total_productos=total_productos,
@@ -104,6 +111,8 @@ def obtener_metricas_dashboard(
         ventas_hoy=ventas_hoy_monto,
         pqrs_recibidas=pqrs_recibidas,
         pqrs_pendientes=pqrs_pendientes,
+        reservas_recibidas=reservas_recibidas,
+        reservas_pendientes=reservas_pendientes,
     )
 
     # 2. Agrupación de Ventas por Día para Gráficos

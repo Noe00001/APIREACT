@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Sparkles, MapPin, MessageSquare, Mail, Phone, MessageCircle } from 'lucide-react';
+import { Sparkles, MapPin, MessageSquare, Mail, Phone, MessageCircle, Lock } from 'lucide-react';
+import { createReserva } from '../services/api';
+import { Link } from 'react-router-dom';
 
 const FAQ_ITEMS = [
   {
@@ -21,10 +23,14 @@ const FAQ_ITEMS = [
 ];
 
 const ContactPage = () => {
+  const user = JSON.parse(localStorage.getItem('cafe_salome_user') || 'null');
+  const token = localStorage.getItem('cafe_salome_token') || sessionStorage.getItem('cafe_salome_token');
+  const isAuthenticated = !!(user && token);
+
   const [formData, setFormData] = useState({
-    nombre: '',
-    email: '',
-    telefono: '',
+    nombre: user ? `${user.nombre} ${user.apellido}` : '',
+    email: user ? user.email : '',
+    telefono: user ? user.telefono || '' : '',
     motivo: 'reserva',
     personas: '2',
     fecha: '',
@@ -34,13 +40,14 @@ const ContactPage = () => {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [activeFaq, setActiveFaq] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -49,7 +56,23 @@ const ContactPage = () => {
       return;
     }
 
-    setSubmitted(true);
+    setIsSubmitting(true);
+    try {
+      await createReserva({
+        nombre: formData.nombre,
+        email: formData.email,
+        telefono: formData.telefono,
+        motivo: formData.motivo,
+        personas: formData.personas,
+        fecha_tentativa: formData.fecha,
+        mensaje: formData.mensaje
+      });
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.message || 'Ocurrió un error enviando la solicitud.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -107,6 +130,17 @@ const ContactPage = () => {
                 Enviar otro mensaje
               </button>
             </div>
+          ) : !isAuthenticated ? (
+            <div className="contact-success-box" style={{ background: 'var(--bg-light)', color: 'var(--text-dark)', textAlign: 'center', padding: '2rem' }}>
+              <span className="success-icon" style={{ background: 'var(--border-color)', color: 'var(--text-light)' }}><Lock size={24} /></span>
+              <h4 style={{ color: 'var(--text-dark)' }}>Inicio de sesión requerido</h4>
+              <p style={{ color: 'var(--text-light)', marginBottom: '1.5rem' }}>
+                Para enviar una solicitud o realizar una reserva debes tener una cuenta e iniciar sesión en nuestra plataforma.
+              </p>
+              <Link to="/login" className="btn-action-primary" style={{ display: 'inline-block', textDecoration: 'none' }}>
+                Iniciar Sesión
+              </Link>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} className="contact-form-elements">
               {error && <div className="modal-alert error">{error}</div>}
@@ -122,6 +156,7 @@ const ContactPage = () => {
                     value={formData.nombre}
                     onChange={handleChange}
                     placeholder="Tu nombre"
+                    disabled
                   />
                 </div>
                 <div className="form-group">
@@ -134,6 +169,7 @@ const ContactPage = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="tu@correo.com"
+                    disabled
                   />
                 </div>
               </div>
@@ -161,35 +197,34 @@ const ContactPage = () => {
                 </div>
               </div>
 
-              {formData.motivo === 'reserva' && (
-                <div className="form-grid-2">
-                  <div className="form-group">
-                    <label htmlFor="c-personas">Número de personas</label>
-                    <select
-                      id="c-personas"
-                      name="personas"
-                      value={formData.personas}
-                      onChange={handleChange}
-                    >
-                      <option value="1">1 persona</option>
-                      <option value="2">2 personas</option>
-                      <option value="3">3 personas</option>
-                      <option value="4">4 personas</option>
-                      <option value="5+">5 o más personas</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="c-fecha">Fecha y hora tentativa</label>
-                    <input
-                      id="c-fecha"
-                      name="fecha"
-                      type="datetime-local"
-                      value={formData.fecha}
-                      onChange={handleChange}
-                    />
-                  </div>
+              <div className="form-grid-2">
+                <div className="form-group">
+                  <label htmlFor="c-personas">Número de personas</label>
+                  <select
+                    id="c-personas"
+                    name="personas"
+                    value={formData.personas}
+                    onChange={handleChange}
+                  >
+                    <option value="1">1 persona</option>
+                    <option value="2">2 personas</option>
+                    <option value="3">3 personas</option>
+                    <option value="4">4 personas</option>
+                    <option value="5+">5 o más personas</option>
+                  </select>
                 </div>
-              )}
+                <div className="form-group">
+                  <label htmlFor="c-fecha">Fecha y hora tentativa</label>
+                  <input
+                    id="c-fecha"
+                    name="fecha"
+                    type="datetime-local"
+                    value={formData.fecha}
+                    onChange={handleChange}
+                    min={new Date().toISOString().slice(0, 16)}
+                  />
+                </div>
+              </div>
 
               <div className="form-group">
                 <label htmlFor="c-mensaje">Mensaje o especificaciones</label>
@@ -203,8 +238,8 @@ const ContactPage = () => {
                 />
               </div>
 
-              <button type="submit" className="btn-action-primary submit-btn-block">
-                Enviar Solicitud
+              <button type="submit" className="btn-action-primary submit-btn-block" disabled={isSubmitting}>
+                {isSubmitting ? 'Enviando...' : 'Enviar Solicitud'}
               </button>
             </form>
           )}
@@ -218,9 +253,9 @@ const ContactPage = () => {
             <p>
               <strong>Café Salome Cat Café</strong>
               <br />
-              Carrera 43A # 1-50, El Poblado
+              20 W 34th St.
               <br />
-              Medellín, Antioquia — Colombia
+              New York, NY 10001 — Estados Unidos
             </p>
             <div className="hours-block">
               <div className="hour-row">

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { getFacturas, downloadFile } from '../../services/api';
 import { Download, FileText, Search } from 'lucide-react';
 
-const FacturasTab = ({ userRole }) => {
+const FacturasTab = ({ userRole, searchTerm = '' }) => {
   const [facturas, setFacturas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
 
   const loadFacturas = async () => {
     try {
@@ -47,17 +46,6 @@ const FacturasTab = ({ userRole }) => {
       </div>
 
       {error && <div className="dashboard-toast error">{error}</div>}
-
-      <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-        <input 
-          type="text" 
-          placeholder="Buscar por número de comprobante o cliente..." 
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="dashboard-search-input"
-          style={{ width: '100%', maxWidth: '400px' }}
-        />
-      </div>
 
       <div className="dashboard-table-wrap">
         <table className="dashboard-table">

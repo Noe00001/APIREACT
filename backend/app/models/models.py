@@ -254,3 +254,20 @@ class MensajeChatbot(Base):
 
     # Relaciones
     conversacion = relationship("ConversacionChatbot", back_populates="mensajes")
+
+
+class ReservaContacto(Base):
+    """Modelo para solicitudes de reservas, eventos y contacto general."""
+    __tablename__ = "reservas_contacto"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    nombre = Column(String(100), nullable=False)
+    email = Column(String(100), nullable=False)
+    telefono = Column(String(50), nullable=True)
+    motivo = Column(Enum("reserva", "adopcion", "evento", "consulta"), nullable=False, default="reserva")
+    personas = Column(String(20), nullable=True)
+    fecha_tentativa = Column(String(50), nullable=True)
+    mensaje = Column(Text, nullable=True)
+    estado = Column(Enum("Pendiente", "Contactado", "Confirmada", "Cancelada"), nullable=False, default="Pendiente")
+    respuesta = Column(Text, nullable=True)
+    creado_en = Column(TIMESTAMP, server_default=func.now())

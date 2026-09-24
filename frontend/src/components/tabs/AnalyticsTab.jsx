@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
-import { Users, ShoppingCart, FileText, Download, TrendingUp, AlertCircle, RefreshCw, Filter } from 'lucide-react';
+import { Users, ShoppingCart, FileText, Download, TrendingUp, AlertCircle, RefreshCw, Filter, Calendar } from 'lucide-react';
 
 const COLORS = ['#d39c6b', '#8b5a2b', '#2c3e50', '#e74c3c'];
 
@@ -240,6 +240,15 @@ const AnalyticsTab = ({ userRole }) => {
           <div>
             <span className="stat-value">{kpis.pqrs_pendientes} / {kpis.pqrs_recibidas}</span>
             <span className="stat-label">PQR Pendientes</span>
+          </div>
+        </div>
+        <div className="dashboard-stat-card" style={{ alignItems: 'center', textAlign: 'center', gap: '0.5rem' }}>
+          <div style={{ background: '#f3e5f5', padding: '1rem', borderRadius: '50%', color: '#8e24aa', marginBottom: '0.5rem' }}>
+            <Calendar size={24} />
+          </div>
+          <div>
+            <span className="stat-value">{kpis.reservas_pendientes} / {kpis.reservas_recibidas}</span>
+            <span className="stat-label">Reservas Pendientes</span>
           </div>
         </div>
       </div>

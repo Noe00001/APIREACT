@@ -15,6 +15,7 @@ import {
   updateProductStatus,
   updateServiceStatus,
   updateUserStatus,
+  getReservas,
 } from '../services/api';
 import AdminCatalogForm from '../components/admin/AdminCatalogForm';
 import UserModal from '../components/modals/UserModal';
@@ -23,7 +24,8 @@ import AnalyticsTab from '../components/tabs/AnalyticsTab';
 import VentasTab from '../components/tabs/VentasTab';
 import FacturasTab from '../components/tabs/FacturasTab';
 import PQRTab from '../components/tabs/PQRTab';
-import { Users, Coffee, Sparkles, PawPrint, SlidersHorizontal, X, BarChart2, ShoppingCart, FileText, MessageSquare, Home } from 'lucide-react';
+import ReservasTab from '../components/tabs/ReservasTab';
+import { Users, Coffee, Sparkles, PawPrint, SlidersHorizontal, X, BarChart2, ShoppingCart, FileText, MessageSquare, Home, Calendar } from 'lucide-react';
 import placeholderImage from '../assets/images/placeholder.svg';
 
 const DashboardPage = () => {
@@ -38,6 +40,7 @@ const DashboardPage = () => {
   const [products, setProducts] = useState([]);
   const [services, setServices] = useState([]);
   const [gatos, setGatos] = useState([]);
+  const [reservas, setReservas] = useState([]);
   const [activeTab, setActiveTab] = useState(
     user?.rol === 'Administrador' ? 'usuarios' : 'productos'
   );
@@ -71,6 +74,7 @@ const DashboardPage = () => {
         productRequest.then(setProducts),
         serviceRequest.then(setServices),
         gatoRequest.then(setGatos),
+        getReservas().then(setReservas),
       ];
 
       if (userRole === 'Administrador') {
@@ -310,6 +314,14 @@ const DashboardPage = () => {
             >
               <MessageSquare size={18} /> Atención (PQR)
             </button>
+            <button
+              type="button"
+              className={`sidebar-link ${activeTab === 'reservas' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('reservas'); setSearchTerm(''); }}
+              style={{ textAlign: 'left', padding: '0.75rem', borderRadius: '4px', background: activeTab === 'reservas' ? 'var(--brand-color)' : 'transparent', color: activeTab === 'reservas' ? '#fff' : 'inherit', border: 'none', cursor: 'pointer', transition: 'background 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            >
+              <Calendar size={18} /> Reservas y Mensajes
+            </button>
             <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
               <a
                 href="/"
@@ -339,6 +351,14 @@ const DashboardPage = () => {
             <div className="dashboard-stat-card">
               <span className="stat-value">{products.filter((p) => p.estado === 'Activo').length}</span>
               <span className="stat-label">Productos Activos</span>
+            </div>
+            <div className="dashboard-stat-card">
+              <span className="stat-value">{services.filter((s) => s.estado === 'Activo').length}</span>
+              <span className="stat-label">Servicios Activos</span>
+            </div>
+            <div className="dashboard-stat-card">
+              <span className="stat-value">{reservas.filter((r) => r.estado === 'Pendiente').length}</span>
+              <span className="stat-label">Reservas Pendientes</span>
             </div>
             <div className="dashboard-stat-card">
               <span className="stat-value">{gatos.filter((g) => g.estado === 'Activo').length}</span>
@@ -401,9 +421,10 @@ const DashboardPage = () => {
 
         {/* NUEVOS TABS: ANALYTICS, VENTAS, FACTURAS, PQR */}
         {activeTab === 'analytics' && <AnalyticsTab userRole={user.rol} />}
-        {activeTab === 'ventas' && <VentasTab userRole={user.rol} userId={user.id} />}
-        {activeTab === 'facturas' && <FacturasTab userRole={user.rol} />}
-        {activeTab === 'pqr' && <PQRTab userRole={user.rol} userId={user.id} />}
+        {activeTab === 'ventas' && <VentasTab userRole={user.rol} userId={user.id} searchTerm={searchTerm} />}
+        {activeTab === 'facturas' && <FacturasTab userRole={user.rol} searchTerm={searchTerm} />}
+        {activeTab === 'pqr' && <PQRTab userRole={user.rol} userId={user.id} searchTerm={searchTerm} />}
+        {activeTab === 'reservas' && <ReservasTab userRole={user.rol} searchTerm={searchTerm} />}
 
         {/* Tab: USUARIOS */}
         {activeTab === 'usuarios' && user.rol === 'Administrador' && (

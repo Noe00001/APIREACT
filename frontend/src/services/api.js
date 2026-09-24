@@ -238,7 +238,7 @@ export const createPqr = (payload) =>
   request('/pqr/', { method: 'POST', body: JSON.stringify(payload) });
 
 export const updatePqrStatus = (id, payload) =>
-  request(`/pqr/${id}/respuesta`, { method: 'PATCH', body: JSON.stringify(payload) });
+  request(`/pqr/${id}/responder`, { method: 'PATCH', body: JSON.stringify(payload) });
 
 // ─── 11. Dashboards y Analítica ──────────────────────────────────────────────────
 export const getDashboardMetrics = (filters = {}) => {
@@ -259,3 +259,18 @@ export const startChatSession = () =>
 
 export const sendChatMessage = (payload) =>
   request('/chatbot/message', { method: 'POST', body: JSON.stringify(payload) });
+
+// ─── 13. Reservas y Contacto ─────────────────────────────────────────────────────
+export const createReserva = (payload) =>
+  request('/reservas/', { method: 'POST', body: JSON.stringify(payload) });
+
+export const getReservas = (filters = {}) => {
+  const params = new URLSearchParams();
+  if (filters.estado) params.append('estado', filters.estado);
+  if (filters.motivo) params.append('motivo', filters.motivo);
+  const qs = params.toString();
+  return request(`/reservas/${qs ? `?${qs}` : ''}`);
+};
+
+export const updateReservaStatus = (id, payload) =>
+  request(`/reservas/${id}/estado`, { method: 'PATCH', body: JSON.stringify(payload) });

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { getVentas, createVenta, getGatos, getServices, getProducts, getUsers, updateVentaStatus } from '../../services/api';
 import { FileText, Plus, X, Search, Check, AlertCircle } from 'lucide-react';
 
-const VentasTab = ({ userRole, userId }) => {
+const VentasTab = ({ userRole, userId, searchTerm = '' }) => {
   const [ventas, setVentas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
 
   // Estados para Modal de Nueva Venta
   const [showModal, setShowModal] = useState(false);
@@ -152,17 +151,6 @@ const VentasTab = ({ userRole, userId }) => {
       </div>
 
       {error && <div className="dashboard-toast error">{error}</div>}
-
-      <div style={{ marginBottom: '1rem', display: 'flex', gap: '0.5rem' }}>
-        <input 
-          type="text" 
-          placeholder="Buscar por número de venta o cliente..." 
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="dashboard-search-input"
-          style={{ width: '100%', maxWidth: '400px' }}
-        />
-      </div>
 
       <div className="dashboard-table-wrap">
         <table className="dashboard-table">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getPqrs, createPqr, updatePqrStatus } from '../../services/api';
 import { MessageSquare, Plus, X, Search, CheckCircle } from 'lucide-react';
 
-const PQRTab = ({ userRole, userId }) => {
+const PQRTab = ({ userRole, userId, searchTerm = '' }) => {
   const [pqrs, setPqrs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -77,6 +77,18 @@ const PQRTab = ({ userRole, userId }) => {
     }
   };
 
+  const filteredPqrs = pqrs.filter((p) => {
+    if (!searchTerm) return true;
+    const term = searchTerm.toLowerCase();
+    return (
+      p.radicado?.toLowerCase().includes(term) ||
+      p.asunto?.toLowerCase().includes(term) ||
+      p.cliente_nombre?.toLowerCase().includes(term) ||
+      p.tipo?.toLowerCase().includes(term) ||
+      p.estado?.toLowerCase().includes(term)
+    );
+  });
+
   return (
     <div className="pqr-container">
       <div className="dashboard-heading" style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between' }}>
@@ -109,10 +121,10 @@ const PQRTab = ({ userRole, userId }) => {
           <tbody>
             {loading ? (
               <tr><td colSpan={userRole !== 'Cliente' ? 7 : 6} style={{ textAlign: 'center' }}>Cargando...</td></tr>
-            ) : pqrs.length === 0 ? (
-              <tr><td colSpan={userRole !== 'Cliente' ? 7 : 6} style={{ textAlign: 'center' }}>No hay PQR registradas.</td></tr>
+            ) : filteredPqrs.length === 0 ? (
+              <tr><td colSpan={userRole !== 'Cliente' ? 7 : 6} style={{ textAlign: 'center' }}>No hay PQR que coincidan con la búsqueda.</td></tr>
             ) : (
-              pqrs.map(p => (
+              filteredPqrs.map(p => (
                 <tr key={p.id}>
                   <td><strong>{p.radicado}</strong></td>
                   <td>{p.tipo}</td>

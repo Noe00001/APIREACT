@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import init_db
 from app.controllers import (
     auth, users, products, services, gatos, ia,
-    ventas, facturas, reportes, pqr, chatbot, analytics
+    ventas, facturas, reportes, pqr, chatbot, analytics, reservas
 )
 
 # Configuración básica de logs
@@ -194,6 +194,7 @@ app.include_router(reportes.router)
 app.include_router(pqr.router)
 app.include_router(chatbot.router)
 app.include_router(analytics.router)
+app.include_router(reservas.router)
 
 
 # ─────────────────────────────────────────────
