@@ -29,8 +29,15 @@ def get_engine():
     3. Si MySQL no está disponible o falla la conexión, utiliza SQLite persistente (cafe_cato.db).
     """
     if DATABASE_URL_ENV:
-        connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL_ENV else {}
-        return create_engine(DATABASE_URL_ENV, echo=False, connect_args=connect_args)
+        if "sqlite" in DATABASE_URL_ENV:
+            return create_engine(DATABASE_URL_ENV, echo=False, connect_args={"check_same_thread": False})
+        else:
+            return create_engine(
+                DATABASE_URL_ENV, 
+                echo=False, 
+                pool_pre_ping=True, 
+                pool_recycle=3600
+            )
 
     # Intento con MySQL
     mysql_url = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
