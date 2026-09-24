@@ -3,7 +3,7 @@
 **Ficha:** 3406211  
 **Programa:** Tecnólogo en Análisis y Desarrollo de Software (Código 228118)  
 **Aprendiz:** SALOMÉ LÓPEZ ESTRADA  
-**Instructor:** César Augusto Moreno Mena  
+**Instructor:** César Augusto Moreno Mena  y Jhan Hader Muñoz Bermúdez 
 **Proyecto:** Sistema de Gestión y Catálogo Web para Cat Café y Barismo  
 
 ---
