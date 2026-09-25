@@ -29,11 +29,18 @@ def get_engine():
     3. Si MySQL no está disponible o falla la conexión, utiliza SQLite persistente (cafe_cato.db).
     """
     if DATABASE_URL_ENV:
-        if "sqlite" in DATABASE_URL_ENV:
-            return create_engine(DATABASE_URL_ENV, echo=False, connect_args={"check_same_thread": False})
+        url = DATABASE_URL_ENV
+        # Automatically fix standard cloud provider URL formats to work with SQLAlchemy 2.0
+        if url.startswith("mysql://"):
+            url = url.replace("mysql://", "mysql+pymysql://", 1)
+        elif url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql://", 1)
+
+        if "sqlite" in url:
+            return create_engine(url, echo=False, connect_args={"check_same_thread": False})
         else:
             return create_engine(
-                DATABASE_URL_ENV, 
+                url, 
                 echo=False, 
                 pool_pre_ping=True, 
                 pool_recycle=3600
