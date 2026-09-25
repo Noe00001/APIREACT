@@ -42,8 +42,11 @@ def get_engine():
             return create_engine(
                 url, 
                 echo=False, 
+                pool_size=2,
+                max_overflow=2,
                 pool_pre_ping=True, 
-                pool_recycle=3600
+                pool_recycle=3600,
+                connect_args={"connect_timeout": 5}
             )
 
     # Intento con MySQL
