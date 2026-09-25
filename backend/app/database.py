@@ -54,9 +54,11 @@ def get_engine():
     try:
         test_engine = create_engine(
             mysql_url,
+            pool_size=2,
+            max_overflow=1,
             pool_pre_ping=True,
             pool_recycle=3600,
-            connect_args={"connect_timeout": 2},
+            connect_args={"connect_timeout": 5},
         )
         with test_engine.connect() as conn:
             conn.execute(text("SELECT 1"))
