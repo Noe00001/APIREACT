@@ -42,11 +42,11 @@ def get_engine():
             return create_engine(
                 url, 
                 echo=False, 
-                pool_size=2,
-                max_overflow=2,
+                pool_size=10,
+                max_overflow=20,
                 pool_pre_ping=True, 
                 pool_recycle=3600,
-                connect_args={"connect_timeout": 5}
+                connect_args={"connect_timeout": 10}
             )
 
     # Intento con MySQL
@@ -54,11 +54,11 @@ def get_engine():
     try:
         test_engine = create_engine(
             mysql_url,
-            pool_size=2,
-            max_overflow=1,
+            pool_size=10,
+            max_overflow=20,
             pool_pre_ping=True,
             pool_recycle=3600,
-            connect_args={"connect_timeout": 5},
+            connect_args={"connect_timeout": 10},
         )
         with test_engine.connect() as conn:
             conn.execute(text("SELECT 1"))
