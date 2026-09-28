@@ -97,14 +97,22 @@ async def _consultar_ia(user_message: str, db: Session) -> str:
     if any(w in msg_lower for w in ["hola", "buen", "saludos", "buenas", "hey"]):
         return "¡Hola! 🐾 Bienvenido a Café Salomé. Soy tu asistente virtual. ¿En qué puedo orientarte hoy? Puedo contarte sobre nuestra carta de café, reservar una tarde de gatoterapia, guiarte para adoptar un michi o ayudarte a radicar una PQR. ☕🐱"
 
+    prods_db = db.query(Producto).filter(Producto.estado == "Activo").limit(3).all()
+    servs_db = db.query(Servicio).filter(Servicio.estado == "Activo").limit(2).all()
+    gatos_db = db.query(Gato).filter(Gato.estado == "Activo").limit(2).all()
+
+    prods_text = ", ".join([f"{p.nombre} (${float(p.precio):,.0f})" for p in prods_db]) if prods_db else "nuestras opciones artesanales"
+    servs_text = " y ".join([f"'{s.nombre}' (${float(s.precio):,.0f})" for s in servs_db]) if servs_db else "nuestras exclusivas experiencias"
+    gatos_text = " y ".join([f"{g.nombre} ({g.raza or 'Mestizo'})" for g in gatos_db]) if gatos_db else "varios gatitos en busca de hogar"
+
     if any(w in msg_lower for w in ["precio", "carta", "menú", "menu", "café", "bebida", "espresso", "capuchino", "muffin", "panaderia"]):
-        return "¡Tenemos deliciosas opciones artesanales! ☕ Entre nuestros favoritos están el Espresso Especial ($5.500), Capuchino Artesanal de Vainilla ($7.800) y nuestro suave Muffin Red Velvet Felino ($6.200). Además, puedes realizar pedidos directamente en nuestra tienda en línea."
+        return f"¡Tenemos deliciosas opciones artesanales! ☕ Entre nuestros favoritos están: {prods_text}. Además, puedes realizar pedidos directamente en nuestra tienda en línea."
 
     if any(w in msg_lower for w in ["gatoterapia", "servicio", "taller", "experiencia", "reserva"]):
-        return "¡Nuestra zona lounge felina te espera! 🐱 Ofrecemos sesiones de 'Tarde de Gatoterapia & Café' (60 minutos de relax con nuestros gatos por $15.000) y el 'Taller de Barismo para Principiantes' ($45.000) para perfeccionar tu técnica de extracción. ¡Pregúntanos por disponibilidad de cupos!"
+        return f"¡Nuestra zona lounge felina te espera! 🐱 Ofrecemos sesiones como {servs_text}. ¡Pregúntanos por disponibilidad de cupos!"
 
     if any(w in msg_lower for w in ["gato", "adopcion", "adoptar", "misi", "bigotes", "adopción"]):
-        return "¡Nos alegra tu interés en dar un hogar a un michi! 🏠 Actualmente tenemos hermosos gatitos en busca de familia como Misi (calicó sociable) y Bigotes (atigrado cariñoso). Todos están vacunados y esterilizados. Puedes conocer sus fichas en la sección 'Adopciones' y radicar tu postulación."
+        return f"¡Nos alegra tu interés en dar un hogar a un michi! 🏠 Actualmente tenemos hermosos gatitos en busca de familia como {gatos_text}. Todos están vacunados y esterilizados. Puedes conocer sus fichas en la sección 'Adopciones' y radicar tu postulación."
 
     if any(w in msg_lower for w in ["pqr", "queja", "reclamo", "peticion", "sugerencia", "inconformidad"]):
         return "Para nosotros tu opinión es vital. 📋 Puedes registrar tu PQR fácilmente desde nuestro módulo 'PQR' en la barra superior. Si estás registrado, podrás hacer seguimiento en tiempo real al estado de tu solicitud (Pendiente, En Proceso, Respondida). ¡Nuestro equipo te responderá con gusto!"

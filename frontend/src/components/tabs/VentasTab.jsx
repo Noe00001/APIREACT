@@ -145,9 +145,11 @@ const VentasTab = ({ userRole, userId, searchTerm = '' }) => {
           <h3>Historial de Adopciones y Experiencias</h3>
           <span className="table-subtitle">Registro de operaciones y contrataciones</span>
         </div>
-        <button type="button" className="btn-action-primary" onClick={prepareNuevaVenta}>
-          <Plus size={16} style={{ marginRight: '5px' }} /> Registrar Operación
-        </button>
+        {userRole !== 'Cliente' && (
+          <button type="button" className="btn-action-primary" onClick={prepareNuevaVenta}>
+            <Plus size={16} style={{ marginRight: '5px' }} /> Registrar Operación
+          </button>
+        )}
       </div>
 
       {error && <div className="dashboard-toast error">{error}</div>}

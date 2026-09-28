@@ -537,6 +537,7 @@ const DashboardPage = () => {
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Precio</th>
+                  <th>Stock</th>
                   <th>Estado</th>
                   {user.rol === 'Administrador' && <th>Acciones</th>}
                 </tr>
@@ -569,6 +570,7 @@ const DashboardPage = () => {
                       <td><strong>{item.nombre}</strong></td>
                       <td className="desc-cell">{item.descripcion || '-'}</td>
                       <td><strong>${Number(item.precio).toLocaleString('es-CO')}</strong></td>
+                      <td>{item.stock !== undefined ? item.stock : 0}</td>
                       <td>
                         <span className={`badge-status status-${item.estado?.toLowerCase()}`}>
                           {item.estado}
@@ -632,6 +634,7 @@ const DashboardPage = () => {
                   <th>Nombre</th>
                   <th>Descripción</th>
                   <th>Precio</th>
+                  <th>Stock</th>
                   <th>Estado</th>
                   {user.rol === 'Administrador' && <th>Acciones</th>}
                 </tr>
@@ -666,6 +669,7 @@ const DashboardPage = () => {
                       <td>
                         {item.precio ? `$${Number(item.precio).toLocaleString('es-CO')}` : 'A consultar'}
                       </td>
+                      <td>{item.stock !== undefined ? item.stock : 0}</td>
                       <td>
                         <span className={`badge-status status-${item.estado?.toLowerCase()}`}>
                           {item.estado}
@@ -731,6 +735,7 @@ const DashboardPage = () => {
                   <th>Raza / Color</th>
                   <th>Sexo</th>
                   <th>Salud</th>
+                  <th>Stock</th>
                   <th>Estado</th>
                   {user.rol === 'Administrador' && <th>Acciones</th>}
                 </tr>
@@ -770,6 +775,7 @@ const DashboardPage = () => {
                           {item.vacunado && <span className="mini-badge">Vacunado</span>}
                         </div>
                       </td>
+                      <td>1</td>
                       <td>
                         <span className={`badge-status status-${item.estado?.toLowerCase()}`}>
                           {item.estado === 'Activo' ? 'Disponible' : 'Adoptado'}

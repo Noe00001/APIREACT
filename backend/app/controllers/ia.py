@@ -82,11 +82,7 @@ def _motor_ia_experto_local(estado_animo: str, preferencia: str, db: Session) ->
     if "cansad" in estado or "energ" in estado or "sueñ" in estado:
         opciones_cafe = [p for p in nombres_prod if "espresso" in p.lower() or "doble" in p.lower()]
         cafe = random.choice(opciones_cafe) if opciones_cafe else random.choice(nombres_prod)
-        maridaje = random.choice([
-            "Galleta de avena con chispas de chocolate amargo",
-            "Muffin Red Velvet",
-            "Brownie intenso"
-        ])
+        maridaje = random.choice([p for p in nombres_prod if p != cafe]) if len(nombres_prod) > 1 else cafe
         mensaje = (
             f"Detectamos que necesitas un impulso revitalizante. Te recomendamos un '{cafe}', "
             f"cuyo perfil de extracción concentra cafeína pura y notas intensas para recargar tu concentración."
@@ -94,11 +90,7 @@ def _motor_ia_experto_local(estado_animo: str, preferencia: str, db: Session) ->
     elif "relaj" in estado or "tranquil" in estado or "paz" in estado:
         opciones_cafe = [p for p in nombres_prod if "capuchino" in p.lower() or "latte" in p.lower()]
         cafe = random.choice(opciones_cafe) if opciones_cafe else random.choice(nombres_prod)
-        maridaje = random.choice([
-            "Tarta suave de frutos rojos",
-            "Croissant recién horneado",
-            "Cheesecake de maracuyá"
-        ])
+        maridaje = random.choice([p for p in nombres_prod if p != cafe]) if len(nombres_prod) > 1 else cafe
         mensaje = (
             f"Para tu momento de calma, un '{cafe}' es la compañía perfecta. Su suave textura con leche cremosa "
             f"complementa un estado de relajación total."
@@ -106,21 +98,13 @@ def _motor_ia_experto_local(estado_animo: str, preferencia: str, db: Session) ->
     elif "dulce" in pref:
         opciones_cafe = [p for p in nombres_prod if "vainilla" in p.lower() or "mocca" in p.lower()]
         cafe = random.choice(opciones_cafe) if opciones_cafe else random.choice(nombres_prod)
-        maridaje = random.choice([
-            "Brownie con nueces y salsa de caramelo",
-            "Alfajor de maicena",
-            "Torta tres leches"
-        ])
+        maridaje = random.choice([p for p in nombres_prod if p != cafe]) if len(nombres_prod) > 1 else cafe
         mensaje = (
             f"Tu preferencia por perfiles dulces armoniza con nuestro '{cafe}', balanceado con notas suaves y reconfortantes."
         )
     else:
         cafe = random.choice(nombres_prod) if nombres_prod else "Café de la casa"
-        maridaje = random.choice([
-            "Pastelito de queso y arándanos",
-            "Galleta con chips de chocolate",
-            "Porción de torta de zanahoria"
-        ])
+        maridaje = random.choice([p for p in nombres_prod if p != cafe]) if len(nombres_prod) > 1 else cafe
         mensaje = (
             f"Para tu estado actual ('{estado_animo}'), el sommelier de IA recomienda '{cafe}', "
             f"un café equilibrado de origen colombiano con notas acarameladas."

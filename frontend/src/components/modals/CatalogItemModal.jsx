@@ -21,6 +21,7 @@ const CatalogItemModal = ({
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
+  const [stock, setStock] = useState(1);
   const [imagen, setImagen] = useState('');
   const [estado, setEstado] = useState('Activo');
 
@@ -41,6 +42,7 @@ const CatalogItemModal = ({
       setNombre(item.nombre || '');
       setDescripcion(item.descripcion || '');
       setPrecio(item.precio !== undefined ? String(item.precio) : '');
+      setStock(item.stock !== undefined ? item.stock : 1);
       setImagen(item.imagen || '');
       setEstado(item.estado || 'Activo');
 
@@ -57,6 +59,7 @@ const CatalogItemModal = ({
       setNombre('');
       setDescripcion('');
       setPrecio('');
+      setStock(1);
       setImagen('');
       setEstado('Activo');
       setEdad(1);
@@ -140,6 +143,7 @@ const CatalogItemModal = ({
           nombre: nombre.trim(),
           descripcion: descripcion.trim(),
           precio: numPrecio,
+          stock: Number(stock),
           imagen: finalImagen,
           ...(isEditing ? { estado } : {}),
         };
@@ -220,6 +224,18 @@ const CatalogItemModal = ({
                   value={precio}
                   onChange={(e) => setPrecio(e.target.value)}
                   placeholder="Ej. 12000"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="modal-item-stock">Stock *</label>
+                <input
+                  id="modal-item-stock"
+                  type="number"
+                  min="0"
+                  required
+                  value={stock}
+                  onChange={(e) => setStock(e.target.value)}
+                  placeholder="Cantidad"
                 />
               </div>
               {isEditing && (
