@@ -37,11 +37,11 @@ def _serialize(user: Usuario) -> dict:
     "",
     response_model=List[UsuarioOut],
     status_code=status.HTTP_200_OK,
-    summary="Listar usuarios con filtros y paginación (Solo Admin)",
+    summary="Listar usuarios con filtros y paginación (Admin/Empleado)",
 )
 async def get_users(
     db: Session = Depends(get_db),
-    _: Usuario = Depends(ADMIN),
+    _: Usuario = Depends(require_role("Administrador", "Empleado")),
     search: Annotated[Optional[str], Query(description="Filtrar por nombre, apellido o correo", max_length=50)] = None,
     skip: Annotated[int, Query(ge=0, description="Número de registros a omitir para paginación")] = 0,
     limit: Annotated[int, Query(ge=1, le=100, description="Cantidad máxima de registros a retornar")] = 50,
